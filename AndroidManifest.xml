@@ -25,6 +25,10 @@
         <activity
             android:name="edu.haverford.cs.phennd.TagView"
             android:label="@string/title_activity_tag_view" >
+            <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.TagView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="edu.haverford.cs.phennd.FavoritesView"
