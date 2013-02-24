@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends Activity {
 
@@ -12,6 +13,31 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        final Button tagViewButton = (Button) findViewById(R.id.buttonTags1);
+        tagViewButton.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), TagView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+
+        final Button favoritesViewButton = (Button) findViewById(R.id.buttonFavorites1);
+        favoritesViewButton.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), FavoritesView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+
     }
 
     @Override
@@ -20,10 +46,11 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+    /*
     public void activities(View view) {
     	Intent intent = new Intent(this, TagView.class);
     	startActivity(intent);
     }
+    */
     
 }

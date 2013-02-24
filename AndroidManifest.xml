@@ -33,10 +33,18 @@
         <activity
             android:name="edu.haverford.cs.phennd.FavoritesView"
             android:label="@string/title_activity_favorites_view" >
+             <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.FavoritesView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name="edu.haverford.cs.phennd.ArticleView"
             android:label="@string/title_activity_article_view" >
+              <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.ArticleView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

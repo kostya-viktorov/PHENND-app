@@ -4,4 +4,47 @@
     android:layout_height="match_parent"
     tools:context=".TagView" >
 
+    <Button
+        android:id="@+id/buttonSettings2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Settings" />
+
+    <Button
+        android:id="@+id/buttonFavorites2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonSettings2"
+        android:text="Favorites" />
+
+    <Button
+        android:id="@+id/buttonTags2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonFavorites2"
+        android:onClick="activities"
+        android:text="Tags" />
+
+    <Button
+        android:id="@+id/buttonMain2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonTags2"
+        android:text="Main" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonSettings2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+    </ListView>
+
 </RelativeLayout>
