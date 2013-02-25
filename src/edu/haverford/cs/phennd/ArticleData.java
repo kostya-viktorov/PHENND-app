@@ -1,6 +1,8 @@
 package edu.haverford.cs.phennd;
 
-import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class ArticleData {
 	final private String pubDate; // Date article published.
@@ -16,7 +18,7 @@ public class ArticleData {
 	
 	
 	final private String category; // The post's category.
-	private ArrayList<String> tags; // A list of the associated tags.
+	private List<String> tags; // A list of the associated tags.
 
 
 	private String content; // The actual text of the post goes here.
@@ -108,7 +110,7 @@ public class ArticleData {
 		return latLong;
 	}
 	
-	public ArrayList<String> getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 		
