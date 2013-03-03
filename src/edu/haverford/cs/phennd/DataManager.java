@@ -18,7 +18,7 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 
 import android.util.Log;
-
+/* test */
 public class DataManager {
 
 	private static Date lastUpdate;
