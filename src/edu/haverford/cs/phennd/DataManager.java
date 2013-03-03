@@ -28,6 +28,8 @@ public class DataManager {
 	private static List<ArticleData> articles;
 	private static URL url; 
 
+	/* BAM! A little bit of that Spice Weasel. */
+	
 	private static List<String> getFlaggedTags(){
 		return flaggedTags;
 	}
