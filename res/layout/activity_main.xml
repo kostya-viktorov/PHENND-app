@@ -39,7 +39,8 @@
 
     <ListView
         android:id="@+id/listView1"
-        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonMain1"
         android:layout_alignParentLeft="true"

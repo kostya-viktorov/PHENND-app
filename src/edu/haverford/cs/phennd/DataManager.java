@@ -30,9 +30,15 @@ public class DataManager {
 
 	/* BAM! A little bit of that Spice Weasel. */
 	
-	private static List<String> getFlaggedTags(){
+	public static List<String> getFlaggedTags(){
 		return flaggedTags;
 	}
+
+	public static List<String> getFavorites(){
+		List<String> favoriteNames = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
+		return favoriteNames;
+	}
+
 	
 	public ArticleData getArticle(String url) { // url is the best we can do as far as unique identifiers go
 		for (int i = 0; i < articles.size(); i++ ) {
@@ -135,4 +141,15 @@ public class DataManager {
 		}
 	}
 
+	// Methods which need to be added for listviews:
+	
+	public List<String> getArticleTitlesForTag(String tagName)
+	{
+		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
+	}
+	
+	public List<String> getArticleTitlesForCategory(String categoryName)
+	{
+		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
+	}
 }

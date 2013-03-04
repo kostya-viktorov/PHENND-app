@@ -1,11 +1,15 @@
 package edu.haverford.cs.phennd;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 public class FavoritesView extends Activity {
 
@@ -37,6 +41,12 @@ public class FavoritesView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
+        
+		List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        		ListView listView = (ListView) findViewById(R.id.listView1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, favoriteArticles);
+		listView.setAdapter(adapter); 
+        
 	}
 
 	@Override
