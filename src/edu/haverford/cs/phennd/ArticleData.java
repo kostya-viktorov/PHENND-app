@@ -2,11 +2,8 @@ package edu.haverford.cs.phennd;
 
 import java.util.List;
 
-
-
 public class ArticleData {
 	final private String pubDate; // Date article published.
-	final private String description; // Brief RSS description (typically a snippet).
 	final private String url; // URL of the post.
 	final private String title; // Title of the post.
 	final private String creator; // Who posted the update?
@@ -24,10 +21,10 @@ public class ArticleData {
 	private String content; // The actual text of the post goes here.
 	private boolean favorited; // Has this been favorited?
 	
-	public ArticleData(String _url, String _pubDate, String _description, String _title, String _creator, String _category) {
+	public ArticleData(String _url, String _pubDate, String _content, String _title, String _creator, String _category) {
 		url = _url;
 		pubDate = _pubDate;
-		description = _description;
+		content = _content;
 		title = _title;
 		creator = _creator;
 		category = _category;
@@ -36,10 +33,10 @@ public class ArticleData {
 		eventLocation = "";
 	}
 	
-	public ArticleData(String _url, String _pubDate, String _description, String _title, String _creator, String _category, String _eventDate, String _eventLocation) {
+	public ArticleData(String _url, String _pubDate, String _content, String _title, String _creator, String _category, String _eventDate, String _eventLocation) {
 		url = _url;
 		pubDate = _pubDate;
-		description = _description;
+		content = _content;
 		title = _title;
 		creator = _creator;
 		category = _category;
@@ -62,9 +59,6 @@ public class ArticleData {
 		// Need to write this!
 	}
 	
-	public void setContent(String _content) {
-		content = _content;
-	}
 	
 	public String getUrl() {
 		return url;
@@ -72,10 +66,6 @@ public class ArticleData {
 	
 	public String getPubDate() {
 		return pubDate;
-	}
-	
-	public String getDescription() {
-		return description;
 	}
 	
 	public String getTitle() {

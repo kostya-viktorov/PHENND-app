@@ -20,37 +20,30 @@ import java.util.ArrayList;
 import android.util.Log;
 /* test */
 public class DataManager {
-
+ 
 	private static Date lastUpdate;
-	private static List<String> allTags = new ArrayList();
-	private static List<String> flaggedTags = new ArrayList();
-	private static List<String> favoriteUIDs = new ArrayList();
-	private static List<ArticleData> articles = new ArrayList();
+	private static List<String> allTags = new ArrayList<String>();
+	private static List<String> flaggedTags = new ArrayList<String>();
+	private static List<String> favoriteUIDs = new ArrayList<String>();
+	private static List<ArticleData> articles = new ArrayList<ArticleData>();
 	private static List<String> favoriteNames = new ArrayList();
 	private static URL url; 
 
 	/* BAM! A little bit of that Spice Weasel. */
 	
 	public static List<String> getFlaggedTags(){
-		flaggedTags.add("Test?");
+		flaggedTags.add("Test");
 		return flaggedTags;
 	}
 
 	public static List<String> getFavorites(){
-//		List<String> favoriteNames = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
-//		favoriteNames.add("Favorite 1");
-//		favoriteNames.add("Favorite 2");		
 		return favoriteNames;
 	}
 
 	
-	public static ArticleData getArticle(String url) { // url is the best we can do as far as unique identifiers go
+	public static ArticleData getArticle(String title) { // url is the best we can do as far as unique identifiers go
 		for (int i = 0; i < articles.size(); i++ ) {
-			if (articles.get(i).getUrl().equals(url)) {
-				if (articles.get(i).getContent() == "") {
-					getArticleContents(articles.get(i));
-					
-				}
+			if (articles.get(i).getTitle().equals(title)) {
 				return articles.get(i);
 			}
 		}
@@ -110,19 +103,19 @@ public class DataManager {
 	public static ArticleData newArticle(Node item) {
 		Element e = (Element)item;
 		String pubDate = extractValue(e, "pubDate");
-		String description = extractValue(e, "description");
+		String contents = extractValue(e, "description");
 		String url = extractValue(e, "link");
 		String title = extractValue(e, "title");
 		favoriteNames.add(title);
 		String creator = extractValue(e, "dc:creator");
 		String category = extractValue(e, "category");
 		/*Log.d("PHENND","pubDate: " + pubDate);
-		Log.d("PHENND", "desc: " + description);
+		Log.d("PHENND", "contents: " + contents);
 		Log.d("PHENND", "url: " + url);
 		Log.d("PHENND", "title: " + title);
 		Log.d("PHENND", "creator: " + creator);
 		Log.d("PHENND", "category: " + category);*/
-		return new ArticleData(url, pubDate, description, title, creator, category);
+		return new ArticleData(url, pubDate, contents, title, creator, category);
 	}
 	
 	public static String extractValue(Element e, String tag) {
@@ -130,34 +123,27 @@ public class DataManager {
 		if (matches.getLength() != 1)  { return "Err!!!"; }
 		return matches.item(0).getTextContent();
 	}
-	
-	public static void getArticleContents(ArticleData article) {
-		String contents = "Content!";
-		try {
-			URL articleUrl = new URL(article.getUrl());
-			URLConnection connection = url.openConnection();
-			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			int responseCode = httpConnection.getResponseCode();
-			
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				InputStream in = httpConnection.getInputStream();
-		}
-		// TODO: acquire content of the article. 
-		article.setContent(contents);
-		} catch (Exception e) {
-		Log.i("PHENND", "Exception getting contents:" + e);
-		}
-	}
+
 
 	// Methods which need to be added for listviews:
 	
 	public static List<String> getArticleTitlesForTag(String tagName)
 	{
-		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
+		List<String> titles = new ArrayList<String>();
+		for (int i = 0; i < articles.size(); i++) {
+			titles.add(articles.get(i).getTitle());
+		}
+		return titles; // Should return a list of article titles, based on articles with the given tag
 	}
 	
 	public static List<String> getArticleTitlesForCategory(String categoryName)
 	{
-		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
+		List<String> catTitles = new ArrayList<String>();
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).getCategory().equals(categoryName)) {
+				catTitles.add(articles.get(i).getTitle());
+			}
+		}
+		return catTitles; // Should return a list of article titles, based on articles with the given tag
 	}
 }

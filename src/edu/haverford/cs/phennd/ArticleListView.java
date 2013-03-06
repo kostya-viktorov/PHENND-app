@@ -13,21 +13,23 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class FavoritesView extends Activity {
+public class ArticleListView extends Activity {
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_favorites_view);
+		setContentView(R.layout.activity_article_list_view);
+		Bundle extras = getIntent().getExtras();
+		String tagsOrCategories = extras.getString("TagsOrCategories");
+		String metaInfo = extras.getString("MetaInfo");
 		
-	       
-		List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
-		ListView listView = (ListView) findViewById(R.id.listView3);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, favoriteArticles);
-		listView.setAdapter(adapter);
-		final Button mainViewButton3 = (Button) findViewById(R.id.buttonMain3);		
-        mainViewButton3.setOnClickListener(
+        final Button mainViewButtonList = (Button) findViewById(R.id.buttonMainList);		
+
+		
+		mainViewButtonList.setOnClickListener(
                 new View.OnClickListener()
                 {
                         @Override
@@ -37,9 +39,8 @@ public class FavoritesView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
-
-        final Button tagsViewButton3 = (Button) findViewById(R.id.buttonTags3);
-        tagsViewButton3.setOnClickListener(
+        final Button tagsViewButtonList = (Button) findViewById(R.id.buttonTagsList);
+		tagsViewButtonList.setOnClickListener(
                 new View.OnClickListener()
                 {
                         @Override
@@ -49,11 +50,10 @@ public class FavoritesView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
-        
-        final ListView listOfStories = (ListView)findViewById(R.id.listView3);
-        
-        listOfStories.setOnItemClickListener(new OnItemClickListener() {
+	
+		final ListView listOfStories = (ListView)findViewById(R.id.listViewList);
 
+		listOfStories.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position,
                     long id) {
@@ -62,9 +62,18 @@ public class FavoritesView extends Activity {
             	intent.putExtra("Name", storyName);
             	startActivityForResult(intent, 0);
             }
-
         });
-  
+       
+		List<String> articles = new ArrayList<String>();
+		if (tagsOrCategories.equals("Tags")) {
+        		articles = DataManager.getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        } else if (tagsOrCategories.equals("Categories")) {
+        		articles = DataManager.getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        }
+      
+        ListView listView = (ListView) findViewById(R.id.listViewList);		
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, articles);
+		listView.setAdapter(adapter); 
         
 	}
 
