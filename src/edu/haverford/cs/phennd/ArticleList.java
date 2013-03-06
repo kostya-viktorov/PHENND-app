@@ -5,17 +5,13 @@ import java.util.List;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class FavoritesView extends Activity {
+public class ArticleList extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +41,6 @@ public class FavoritesView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
-        
-        final ListView listOfStories = (ListView)findViewById(R.id.listView1);
-        
-        listOfStories.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position,
-                    long id) {
-                Intent intent = new Intent(v.getContext(), ArticleView.class);
-            	String storyName = (String) listOfStories.getItemAtPosition(position);
-            	intent.putExtra("Name", storyName);
-            	startActivityForResult(intent, 0);
-            }
-
-        });
         
 		List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         		ListView listView = (ListView) findViewById(R.id.listView1);
