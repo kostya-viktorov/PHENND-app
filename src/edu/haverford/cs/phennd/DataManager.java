@@ -22,20 +22,25 @@ import android.util.Log;
 public class DataManager {
 
 	private static Date lastUpdate;
-	private static List<String> allTags;
-	private static List<String> flaggedTags;
-	private static List<String> favoriteUIDs;
-	private static List<ArticleData> articles;
+	private static List<String> allTags = new ArrayList();;
+	private static List<String> flaggedTags = new ArrayList();;
+	private static List<String> favoriteUIDs = new ArrayList();;
+	private static List<ArticleData> articles = new ArrayList();;
 	private static URL url; 
 
 	/* BAM! A little bit of that Spice Weasel. */
 	
 	public static List<String> getFlaggedTags(){
+<<<<<<< HEAD
 		List<String> flagTags = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
 		flagTags.add("Tag 1");
 		flagTags.add("Tag 2");		
 		return flagTags;
 		//		return flaggedTags;
+=======
+		flaggedTags.add("Test!");
+		return flaggedTags;
+>>>>>>> a46cd0b34f1814125a2d77f39c5b7da8acf74876
 	}
 
 	public static List<String> getFavorites(){
