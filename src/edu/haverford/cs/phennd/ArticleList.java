@@ -42,6 +42,18 @@ public class ArticleList extends Activity {
                         }
                 });
         
+        final Button settingsViewButton3 = (Button) findViewById(R.id.buttonSettings3);
+        settingsViewButton3.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), SettingsView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+        
 		List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         		ListView listView = (ListView) findViewById(R.id.listView1);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, favoriteArticles);

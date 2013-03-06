@@ -50,6 +50,18 @@ public class FavoritesView extends Activity {
                         }
                 });
         
+        final Button settingsViewButton3 = (Button) findViewById(R.id.buttonSettings3);
+        settingsViewButton3.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), SettingsView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+        
         final ListView listOfStories = (ListView)findViewById(R.id.listView3);
         
         listOfStories.setOnItemClickListener(new OnItemClickListener() {

@@ -5,12 +5,21 @@
     tools:context=".ArticleView" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewArticleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="105dp"
+        android:text="Article title here!" />
+    
+    <TextView
+        android:id="@+id/textViewArticleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewArticleTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="55dp"
         android:text="Article text here!" />
  
 </RelativeLayout>
