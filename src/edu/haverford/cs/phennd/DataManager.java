@@ -36,6 +36,8 @@ public class DataManager {
 
 	public static List<String> getFavorites(){
 		List<String> favoriteNames = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
+		favoriteNames.add("Favorite 1");
+		favoriteNames.add("Favorite 2");		
 		return favoriteNames;
 	}
 
