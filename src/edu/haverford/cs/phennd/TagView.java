@@ -1,6 +1,5 @@
 package edu.haverford.cs.phennd;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import android.os.Bundle;
@@ -8,9 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class TagView extends Activity {
 
@@ -45,10 +46,25 @@ public class TagView extends Activity {
                         }
                 });
         flaggedTags = DataManager.getFlaggedTags(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
-        ListView listView = (ListView) findViewById(R.id.listView1);
+        ListView listView = (ListView) findViewById(R.id.listView2);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flaggedTags);
 		listView.setAdapter(adapter); 
         
+        final ListView listOfTags = (ListView)findViewById(R.id.listView1);
+        
+        listOfTags.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position,
+                    long id) {
+                Intent intent = new Intent(v.getContext(), ArticleListView.class);
+            	String tagName = (String) listOfTags.getItemAtPosition(position);
+            	intent.putExtra("TagsOrCategories", "Tags");
+            	intent.putExtra("MetaInfo", tagName);
+            	startActivityForResult(intent, 0);
+            }
+
+        });
 	}
 
 	@Override
@@ -58,4 +74,6 @@ public class TagView extends Activity {
 		return true;
 	}
 
+	
+	
 }

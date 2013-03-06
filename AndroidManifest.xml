@@ -46,6 +46,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-    </application>
+         <activity
+            android:name="edu.haverford.cs.phennd.ArticleListView"
+            android:label="@string/title_activity_article_list_view" >
+            <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.ArticleListView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        </application>
 
 </manifest>

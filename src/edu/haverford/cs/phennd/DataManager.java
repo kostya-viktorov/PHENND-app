@@ -31,7 +31,11 @@ public class DataManager {
 	/* BAM! A little bit of that Spice Weasel. */
 	
 	public static List<String> getFlaggedTags(){
-		return flaggedTags;
+		List<String> flagTags = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
+		flagTags.add("Tag 1");
+		flagTags.add("Tag 2");		
+		return flagTags;
+		//		return flaggedTags;
 	}
 
 	public static List<String> getFavorites(){
@@ -145,13 +149,18 @@ public class DataManager {
 
 	// Methods which need to be added for listviews:
 	
-	public List<String> getArticleTitlesForTag(String tagName)
+	public static List<String> getArticleTitlesForTag(String tagName)
 	{
-		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
-	}
+		List<String> taggedArticles = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
+		taggedArticles.add("Tag Article 1");
+		taggedArticles.add("Tag Article 2");		
+		return taggedArticles;	
+		}
 	
-	public List<String> getArticleTitlesForCategory(String categoryName)
+	public static List<String> getArticleTitlesForCategory(String categoryName)
 	{
-		return new ArrayList<String>(); // Should return a list of article titles, based on articles with the given tag
-	}
+		List<String> categoryArticles = new ArrayList<String>(); // Based on favoriteUIDs, this method should return a list of the names of favorited articles
+		categoryArticles.add("Category Article 1");
+		categoryArticles.add("Category Article 2");		
+		return categoryArticles;		}
 }
