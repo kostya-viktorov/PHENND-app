@@ -1,13 +1,20 @@
 package edu.haverford.cs.phennd;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 public class TagView extends Activity {
+
+    List<String> flaggedTags;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,11 @@ public class TagView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
+        flaggedTags = DataManager.getFlaggedTags(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        ListView listView = (ListView) findViewById(R.id.listView1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flaggedTags);
+		listView.setAdapter(adapter); 
+        
 	}
 
 	@Override

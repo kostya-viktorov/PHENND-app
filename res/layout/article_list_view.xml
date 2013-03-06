@@ -2,47 +2,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".FavoritesView" >
 
     <Button
-        android:id="@+id/buttonMain1"
+        android:id="@+id/buttonSettings3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Main" />
+        android:layout_alignParentRight="true"
+        android:text="Settings" />
 
     <Button
-        android:id="@+id/buttonTags1"
+        android:id="@+id/buttonFavorites3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonMain1"
+        android:layout_toLeftOf="@+id/buttonSettings3"
+        android:text="Favorites" />
+
+    <Button
+        android:id="@+id/buttonTags3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonFavorites3"
         android:onClick="activities"
         android:text="Tags" />
 
     <Button
-        android:id="@+id/buttonFavorites1"
+        android:id="@+id/buttonMain3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonTags1"
-        android:text="Favorites" />
-
-    <Button
-        android:id="@+id/buttonSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonFavorites1"
-        android:text="Settings" />
+        android:layout_toLeftOf="@+id/buttonTags3"
+        android:text="Main" />
 
     <ListView
         android:id="@+id/listView1"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonMain1"
+        android:layout_above="@+id/buttonMain3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
