@@ -13,9 +13,10 @@ public class ArticleView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article_view);
 		Bundle extras = getIntent().getExtras();
-		final TextView articleText = (TextView) findViewById(R.id.textView1);
-		String articleName = extras.getString("Name");
-		articleText.setText(articleName);		
+		final TextView articleTitle = (TextView) findViewById(R.id.textViewArticleTitle);
+
+		articleTitle.setText(extras.getString("Name"));	
+		//articleText.setText(extras.getString(""));
 		// Basically, now you can use articleName to get article info from DataManager and build the page accordingly
 	}
 

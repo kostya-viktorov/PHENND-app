@@ -49,6 +49,21 @@ public class MainActivity extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
+        
+        final Button settingsViewButton = (Button) findViewById(R.id.buttonSettings1);
+        settingsViewButton.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), SettingsView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+        
+       
+       // I think that this is why sometimes articles don't load - I might be crazy (KV)
        Thread t = new Thread() { 
     	   @Override
     	   public void run() {

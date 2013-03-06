@@ -26,9 +26,7 @@ public class ArticleListView extends Activity {
 		String tagsOrCategories = extras.getString("TagsOrCategories");
 		String metaInfo = extras.getString("MetaInfo");
 		
-        final Button mainViewButtonList = (Button) findViewById(R.id.buttonMainList);		
-
-		
+        final Button mainViewButtonList = (Button) findViewById(R.id.buttonMainList);
 		mainViewButtonList.setOnClickListener(
                 new View.OnClickListener()
                 {
@@ -39,6 +37,7 @@ public class ArticleListView extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
+		
         final Button tagsViewButtonList = (Button) findViewById(R.id.buttonTagsList);
 		tagsViewButtonList.setOnClickListener(
                 new View.OnClickListener()
@@ -47,6 +46,18 @@ public class ArticleListView extends Activity {
                         public void onClick(View v)
                         {
                             Intent intent = new Intent(v.getContext(), TagView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+		
+		final Button settingsViewButtonList = (Button) findViewById(R.id.buttonSettingsList);
+        settingsViewButtonList.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), SettingsView.class);
                             startActivityForResult(intent, 0);
                         }
                 });

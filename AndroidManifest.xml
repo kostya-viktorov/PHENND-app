@@ -55,6 +55,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.haverford.cs.phennd.SettingsView"
+            android:label="@string/title_activity_settings_view" >
+            <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.SettingsView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         </application>
 
 </manifest>

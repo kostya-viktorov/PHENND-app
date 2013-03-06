@@ -45,7 +45,20 @@ public class TagView extends Activity {
                             Intent intent = new Intent(v.getContext(), FavoritesView.class);
                             startActivityForResult(intent, 0);
                         }
-                }); 
+                });
+        
+        final Button settingsViewButton2 = (Button) findViewById(R.id.buttonSettings2);
+        settingsViewButton2.setOnClickListener(
+                new View.OnClickListener()
+                {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            Intent intent = new Intent(v.getContext(), SettingsView.class);
+                            startActivityForResult(intent, 0);
+                        }
+                });
+        
         flaggedTags = DataManager.getFlaggedTags(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         ListView listView = (ListView) findViewById(R.id.listView2);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flaggedTags);
