@@ -127,6 +127,14 @@ public class MainActivity extends Activity {
                             startActivityForResult(intent, 0);
                         }
                 });
+       Thread t = new Thread() { 
+    	   @Override
+    	   public void run() {
+    	        DataManager.updateArticles();
+    	   }
+       };
+       t.start();
+
 
     }
 
