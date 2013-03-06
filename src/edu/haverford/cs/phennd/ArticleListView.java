@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class ArticleListView extends Activity {
 
-	List<String> articles;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +64,16 @@ public class ArticleListView extends Activity {
             }
         });
        
-        if (tagsOrCategories.equals("Tags")) {
-        		articles = DataManager.getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+		List<String> articles = new ArrayList<String>();
+		if (tagsOrCategories.equals("Tags")) {
+        		articles = new DataManager().getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         } else if (tagsOrCategories.equals("Categories")) {
-        		articles = DataManager.getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        		articles = new DataManager().getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         }
-		System.out.println("9");
       
         ListView listView = (ListView) findViewById(R.id.listViewList);		
-		System.out.println("10");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, articles);
-		System.out.println("11");
 		listView.setAdapter(adapter); 
-		System.out.println("12");
         
 	}
 
