@@ -5,7 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_tag_view">Tag View</string>
-    <string name="title_activity_favorites_view">FavoritesView</string>
-    <string name="title_activity_article_view">ArticleView</string>
-
-</resources>
+    <string name="title_activity_favorites_view">Favorites View</string>
+    <string name="title_activity_article_view">Article View</string>
+    <string name="title_activity_article_list_view">Article List View</string>
+    
+</resources> 

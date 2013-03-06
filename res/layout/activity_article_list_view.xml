@@ -2,46 +2,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".ArticleListView" >
 
     <Button
-        android:id="@+id/buttonMain1"
+        android:id="@+id/buttonSettingsList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Main" />
-
-    <Button
-        android:id="@+id/buttonTags1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonMain1"
-        android:text="Tags" />
- 
-    <Button
-        android:id="@+id/buttonFavorites1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonTags1"
-        android:text="Favorites" />
-
-    <Button
-        android:id="@+id/buttonSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonFavorites1"
+        android:layout_alignParentRight="true"
         android:text="Settings" />
 
-    <ListView
-        android:id="@+id/listView1"
-        android:orientation="vertical"
+    <Button
+        android:id="@+id/buttonFavoritesList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonMain1"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonSettingsList"
+        android:text="Favorites" />
+ 
+    <Button
+        android:id="@+id/buttonTagsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonFavoritesList"
+        android:text="Tags" />
+
+    <Button
+        android:id="@+id/buttonMainList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonTagsList"
+        android:text="Main" />
+
+    <ListView
+        android:id="@+id/listViewList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonMainList"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
