@@ -2,8 +2,6 @@ package edu.haverford.cs.phennd;
 
 import java.util.List;
 
-
-
 public class ArticleData {
 	final private String pubDate; // Date article published.
 	final private String description; // Brief RSS description (typically a snippet).
