@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsView" >
+
+    <LinearLayout
+        android:id="@+id/settings_choices"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+    	
+        <CheckBox
+        	android:id="@+id/checkbox_enable_notifications"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="Enable Notifications"
+        	android:onClick="onEnableNotificationsClicked" />
+    
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Tags I Am Interested In:" />
+        
+    	<ListView
+        	android:id="@+id/listViewSettingsTags"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content" />
+    
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonSettingsSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Settings" />
+
+    <Button
+        android:id="@+id/buttonFavoritesSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonSettingsSettings"
+        android:text="Favorites" />
+
+    <Button
+        android:id="@+id/buttonTagsSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonFavoritesSettings"
+        android:text="Tags" />
+
+    <Button
+        android:id="@+id/buttonMainSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonTagsSettings"
+        android:text="Main" />
+
+    
+    
+</RelativeLayout>
