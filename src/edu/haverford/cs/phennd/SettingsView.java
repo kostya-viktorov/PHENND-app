@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class SettingsView extends Activity {
-// did I make it?
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,22 @@ public class SettingsView extends Activity {
 		String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
 		ListView listViewSettings = (ListView) findViewById(R.id.listViewSettingsTags);
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
-		listViewSettings.setAdapter(adapter); 
+		CheckBox[] categoriesCheckBoxList = new CheckBox[categories.length];
+		for (int i = 0; i < categories.length; i++) {
+			CheckBox tmpBox = new CheckBox(this);
+			tmpBox.setText(categories[i]);
+			categoriesCheckBoxList[i] = tmpBox;
+		}
+		
+		
+		// Filling the ListView with Strings
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
+		//listViewSettings.setAdapter(adapter); 
+		
+		// Filling the ListView with CheckBoxes
+		// Currently broked, each element is shown as a reference to the checkbox...
+		ArrayAdapter<CheckBox> checkBoxAdapter = new ArrayAdapter<CheckBox>(this, android.R.layout.simple_list_item_1, categoriesCheckBoxList);
+		listViewSettings.setAdapter(checkBoxAdapter); 
 		
 		
 		// 3/4 buttons (ignores an attempt to go from settings to settings)
