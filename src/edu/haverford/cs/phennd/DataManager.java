@@ -106,7 +106,6 @@ public class DataManager {
 		String contents = extractValue(e, "description");
 		String url = extractValue(e, "link");
 		String title = extractValue(e, "title");
-		favoriteNames.add(title);
 		String creator = extractValue(e, "dc:creator");
 		String category = extractValue(e, "category");
 		/*Log.d("PHENND","pubDate: " + pubDate);
@@ -145,5 +144,11 @@ public class DataManager {
 			}
 		}
 		return catTitles; // Should return a list of article titles, based on articles with the given tag
+	}
+	public static void addFavorite(String title) {
+		favoriteNames.add(title);
+	}
+	public static void removeFavorite(String title) {
+		favoriteNames.remove(favoriteNames.indexOf(title));
 	}
 }
