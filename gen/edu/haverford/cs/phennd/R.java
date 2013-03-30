@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int phenndsplash=0x7f020001;
     }
     public static final class id {
         public static final int buttonFavorites1=0x7f07000e;
@@ -54,6 +55,7 @@ public final class R {
         public static final int activity_settings_view=0x7f030004;
         public static final int activity_tag_view=0x7f030005;
         public static final int article_list_view=0x7f030006;
+        public static final int splashactivity=0x7f030007;
     }
     public static final class menu {
         public static final int activity_article_view=0x7f060000;
