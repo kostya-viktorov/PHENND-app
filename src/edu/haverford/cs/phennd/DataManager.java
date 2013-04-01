@@ -17,10 +17,12 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 /* test */
 public class DataManager {
- 
 	private static Date lastUpdate;
 	private static List<String> allTags = new ArrayList<String>();
 	private static List<String> flaggedTags = new ArrayList<String>();
@@ -28,8 +30,8 @@ public class DataManager {
 	private static List<ArticleData> articles = new ArrayList<ArticleData>();
 	private static List<String> favoriteNames = new ArrayList();
 	private static URL url; 
+	private static PHENNDDbOpenHelper phenndDB;
 
-	/* BAM! A little bit of that Spice Weasel. */
 	
 	public static List<String> getFlaggedTags(){
 		flaggedTags.add("Test");
@@ -41,18 +43,62 @@ public class DataManager {
 	}
 
 	
+	private static String dbClean(String toClean) { // Figure out how to use URLs in a database correctly
+		return toClean;
+	}
 	public static ArticleData getArticle(String title) { // url is the best we can do as far as unique identifiers go
+		
 		for (int i = 0; i < articles.size(); i++ ) {
 			if (articles.get(i).getTitle().equals(title)) {
 				return articles.get(i);
 			}
 		}
-		return null;
+		SQLiteDatabase db = phenndDB.getReadableDatabase();
+		String[] results_columns = new String[] { 
+				phenndDB.COL_URL, phenndDB.COL_PUBDATE, phenndDB.COL_CONTENTS, phenndDB.COL_TITLE,
+				phenndDB.COL_CREATOR, phenndDB.COL_CATEGORY, phenndDB.COL_EVENTDATE, 
+				phenndDB.COL_EVENTLOCATION, phenndDB.COL_FAVORITED};
+		String where = phenndDB.COL_TITLE + "=" + dbClean(title);
+		String whereArgs[] = null;
+		String groupBy = null;
+		String having = null;
+		String order = null;
+		
+		Cursor cursor = db.query(phenndDB.DATABASE_TABLE, results_columns, where, whereArgs, groupBy, having, order);
+		if (cursor.getCount() != 1) { return null; }
+		else {
+			ArticleData article;
+			cursor.moveToFirst();
+			String _url = extract(cursor, phenndDB.COL_URL);
+			String _pubDate = extract(cursor, phenndDB.COL_PUBDATE);
+			String _contents = extract(cursor, phenndDB.COL_CONTENTS);
+			String _title = extract(cursor, phenndDB.COL_TITLE);
+			String _creator = extract(cursor, phenndDB.COL_CREATOR);
+			String _category = extract(cursor, phenndDB.COL_CATEGORY);
+			String _eventdate = extract(cursor, phenndDB.COL_EVENTDATE);
+			String _eventlocation = extract(cursor, phenndDB.COL_EVENTLOCATION);
+
+			article = new ArticleData(_url, _pubDate, _contents, _title, _creator, _category, _eventdate, _eventlocation);
+			articles.add(article);
+			return article;
+		}
+	}
+	
+	private static String extract(Cursor cursor, String col) {
+		int idx = cursor.getColumnIndex(col); 
+		if ( idx > -1) {
+			return cursor.getString(idx);
+		}
+		else {
+			return "";
+		}
+	}
+	
+	public DataManager(Context context) {
+		phenndDB = new PHENNDDbOpenHelper(context, PHENNDDbOpenHelper.DATABASE_NAME, null, PHENNDDbOpenHelper.DATABASE_VERSION);
 	}
 	
 	public static boolean updateArticles() {
-		// http://www.androidhive.info/2011/11/android-xml-parsing-tutorial/
-		// TODO: Write method to update list of articles.
 
 		try {
 			url = new URL("http://updates.phennd.org/feed");
@@ -77,9 +123,10 @@ public class DataManager {
 				else {
 					for (int i = 0; i < rss.getLength(); i++) {
 						Node item = rss.item(i);
-					//		if (isNewArticle(item)) {
+							if (isNewArticle(item)) {
 								articles.add(newArticle(item));
-						//	}
+								//TODO: add to DB
+							}
 					}
 					return true;
 				}
@@ -91,6 +138,7 @@ public class DataManager {
 	}
 	
 	public static boolean isNewArticle(Node item) {
+		//TODO: Lookup in DB
 		String url = extractValue((Element)item, "link");
 		for (int i = 0; i < articles.size(); i++) {
 			if (articles.get(i).getUrl() == url) {
@@ -114,6 +162,7 @@ public class DataManager {
 		Log.d("PHENND", "title: " + title);
 		Log.d("PHENND", "creator: " + creator);
 		Log.d("PHENND", "category: " + category);*/
+		//TODO: Insert into DB
 		return new ArticleData(url, pubDate, contents, title, creator, category);
 	}
 	
@@ -128,6 +177,7 @@ public class DataManager {
 	
 	public static List<String> getArticleTitlesForTag(String tagName)
 	{
+		//TODO: lookup in DB
 		List<String> titles = new ArrayList<String>();
 		for (int i = 0; i < articles.size(); i++) {
 			titles.add(articles.get(i).getTitle());
@@ -137,6 +187,7 @@ public class DataManager {
 	
 	public static List<String> getArticleTitlesForCategory(String categoryName)
 	{
+		//TODO: lookup in DB
 		List<String> catTitles = new ArrayList<String>();
 		for (int i = 0; i < articles.size(); i++) {
 			if (articles.get(i).getCategory().equals(categoryName)) {
@@ -147,8 +198,10 @@ public class DataManager {
 	}
 	public static void addFavorite(String title) {
 		favoriteNames.add(title);
+		//TODO: add to DB
 	}
 	public static void removeFavorite(String title) {
 		favoriteNames.remove(favoriteNames.indexOf(title));
+		//TODO: add to DB
 	}
 }
