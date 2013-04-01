@@ -31,38 +31,6 @@
     
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonSettingsSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Settings" />
-
-    <Button
-        android:id="@+id/buttonFavoritesSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonSettingsSettings"
-        android:text="Favorites" />
-
-    <Button
-        android:id="@+id/buttonTagsSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonFavoritesSettings"
-        android:text="Tags" />
-
-    <Button
-        android:id="@+id/buttonMainSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonTagsSettings"
-        android:text="Main" />
-
-    
+ 
     
 </RelativeLayout>
