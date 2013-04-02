@@ -62,7 +62,14 @@ public class ArticleData {
 	
 	
 	public void setTags(String _tags) {
-		// Need to write this!
+		String[] split = _tags.split(",");
+		for (int i = 0; i < split.length; i++) {
+			tags.clear();
+			tags.add(split[i]);
+		}
+	}
+	public void addTag(String tag) {
+		tags.add(tag);
 	}
 	
 	
