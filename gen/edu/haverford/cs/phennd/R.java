@@ -15,37 +15,17 @@ public final class R {
         public static final int phenndsplash=0x7f020001;
     }
     public static final class id {
-        public static final int buttonFavorites1=0x7f07000e;
-        public static final int buttonFavorites2=0x7f07001a;
-        public static final int buttonFavorites3=0x7f070009;
-        public static final int buttonFavoritesList=0x7f070001;
-        public static final int buttonFavoritesSettings=0x7f070016;
-        public static final int buttonMain1=0x7f070010;
-        public static final int buttonMain2=0x7f07001c;
-        public static final int buttonMain3=0x7f07000b;
-        public static final int buttonMainList=0x7f070003;
-        public static final int buttonMainSettings=0x7f070018;
-        public static final int buttonSettings1=0x7f07000d;
-        public static final int buttonSettings2=0x7f070019;
-        public static final int buttonSettings3=0x7f070008;
-        public static final int buttonSettingsList=0x7f070000;
-        public static final int buttonSettingsSettings=0x7f070015;
-        public static final int buttonTags1=0x7f07000f;
-        public static final int buttonTags2=0x7f07001b;
-        public static final int buttonTags3=0x7f07000a;
-        public static final int buttonTagsList=0x7f070002;
-        public static final int buttonTagsSettings=0x7f070017;
-        public static final int checkBox1=0x7f070007;
-        public static final int checkbox_enable_notifications=0x7f070013;
-        public static final int listView1=0x7f070011;
-        public static final int listView2=0x7f07001d;
-        public static final int listView3=0x7f07000c;
-        public static final int listViewList=0x7f070004;
-        public static final int listViewSettingsTags=0x7f070014;
-        public static final int menu_settings=0x7f07001e;
-        public static final int settings_choices=0x7f070012;
-        public static final int textViewArticleText=0x7f070006;
-        public static final int textViewArticleTitle=0x7f070005;
+        public static final int checkBox1=0x7f070003;
+        public static final int checkbox_enable_notifications=0x7f070007;
+        public static final int listView1=0x7f070005;
+        public static final int listView2=0x7f070009;
+        public static final int listView3=0x7f070004;
+        public static final int listViewList=0x7f070000;
+        public static final int listViewSettingsTags=0x7f070008;
+        public static final int menu_settings=0x7f07000a;
+        public static final int settings_choices=0x7f070006;
+        public static final int textViewArticleText=0x7f070002;
+        public static final int textViewArticleTitle=0x7f070001;
     }
     public static final class layout {
         public static final int activity_article_list_view=0x7f030000;
@@ -66,13 +46,12 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int hello_world=0x7f040001;
-        public static final int menu_settings=0x7f040002;
-        public static final int title_activity_article_list_view=0x7f040006;
-        public static final int title_activity_article_view=0x7f040005;
-        public static final int title_activity_favorites_view=0x7f040004;
-        public static final int title_activity_settings_view=0x7f040007;
-        public static final int title_activity_tag_view=0x7f040003;
+        public static final int menu_settings=0x7f040001;
+        public static final int title_activity_article_list_view=0x7f040005;
+        public static final int title_activity_article_view=0x7f040004;
+        public static final int title_activity_favorites_view=0x7f040003;
+        public static final int title_activity_settings_view=0x7f040006;
+        public static final int title_activity_tag_view=0x7f040002;
     }
     public static final class style {
         /** 

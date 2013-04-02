@@ -4,46 +4,12 @@
     android:layout_height="match_parent"
     tools:context=".ArticleListView" >
 
-    <Button
-        android:id="@+id/buttonSettingsList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Settings" />
-
-    <Button
-        android:id="@+id/buttonFavoritesList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonSettingsList"
-        android:text="Favorites" />
- 
-    <Button
-        android:id="@+id/buttonTagsList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonFavoritesList"
-        android:text="Tags" />
-
-    <Button
-        android:id="@+id/buttonMainList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonTagsList"
-        android:text="Main" />
-
     <ListView
         android:id="@+id/listViewList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonMainList"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
-
     </ListView>
 
 </RelativeLayout>
