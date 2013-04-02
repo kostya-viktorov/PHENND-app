@@ -35,6 +35,10 @@ public class DataManager {
 	private static URL url; 
 	private static PHENNDDbOpenHelper phenndDB;
 	private static DataManager self = null;
+	private static int updatedCount = 0;
+	private static List<String> updatedTitles = new ArrayList<String>();
+	
+
 
 	public static DataManager getDataManager(Context context) {
 		if (self == null) {
@@ -155,8 +159,14 @@ public class DataManager {
 			for (int i = 0; i < rss.getLength(); i++) {
 				Node item = rss.item(i);
 					if (isNewArticle(item)) {
-						changed = true;
-						articles.add(newArticle(item));
+
+						ArticleData article =newArticle(item);
+						if (article.getTitle() != "") {
+							changed = true;
+							updatedCount++;
+							updatedTitles.add(article.getTitle());
+							articles.add(article);
+						}
 					}
 			}
 			return changed;
@@ -325,4 +335,25 @@ public class DataManager {
 		db.update(PHENNDDbOpenHelper.DATABASE_TABLE, updatedValues, where, whereArgs);
 		favoriteNames.remove(favoriteNames.indexOf(title));
 	}
+	
+	public static int getUpdatedCount() {
+		return updatedCount;
+	}
+	public static List<String> getUpdatedTitles() {
+		return updatedTitles;
+	}
+	public static void clearUpdated() {
+		updatedCount = 0;
+		updatedTitles.clear();
+	}
+	
+	/* Quote from info passed along to Dan
+	 * I added the background service, which updates the list of articles. 
+	 * Also, updating articles now also records how many articles have been acquired as a static field "updatedCount", 
+	 * and I am providing the method "static int getupdatedCount()" and "List<String> getupdatedTitles()", 
+	 * as well as "clearUpdated()" to clear it once they've loaded. This should probably be called in "onResume".
+	 * 
+	 * Also, we need to modify onResume to schedule properly. 
+	 * That needs to be taken from the preferences, which I believe is Kostya's job.
+	 */
 }
