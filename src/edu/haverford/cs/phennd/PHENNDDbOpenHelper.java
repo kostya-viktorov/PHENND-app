@@ -21,12 +21,13 @@ public class PHENNDDbOpenHelper extends SQLiteOpenHelper {
 	public static final String COL_EVENTDATE = "eventDate";
 	public static final String COL_EVENTLOCATION = "eventLocation";
 	public static final String COL_FAVORITED = "favorited";
+	public static final String COL_TAGS = "tags";
 	
 	private static final String DATABASE_CREATE = "create table " + DATABASE_TABLE + 
 			" (" + KEY_ID + " integer primary key autoincrement, " +
 			COL_PUBDATE + " text, " + COL_CONTENTS + " text, " + COL_URL + " text, " + 
 			COL_TITLE + " text, " +  COL_CREATOR + " text, " + COL_CATEGORY + " text, " + 
-			COL_EVENTDATE + " text, " + COL_EVENTLOCATION + " text, " + COL_FAVORITED + " int);";
+			COL_EVENTDATE + " text, " + COL_EVENTLOCATION + " text, " + COL_TAGS + " text, " + COL_FAVORITED + " int);";
 	
 	PHENNDDbOpenHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
