@@ -1,6 +1,6 @@
 package edu.haverford.cs.phennd;
 
-import edu.haverford.cs.phennd.NotificationService;
+//import edu.haverford.cs.phennd.NotificationService;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;

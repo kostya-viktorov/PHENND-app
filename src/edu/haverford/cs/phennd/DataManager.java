@@ -17,6 +17,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -37,9 +39,8 @@ public class DataManager {
 	private static DataManager self = null;
 	private static int updatedCount = 0;
 	private static List<String> updatedTitles = new ArrayList<String>();
+	private static Context appContext;
 	
-
-
 	public static DataManager getDataManager(Context context) {
 		if (self == null) {
 			self = new DataManager(context);
@@ -116,6 +117,7 @@ public class DataManager {
 	}
 	
 	public DataManager(Context context) {
+		DataManager.appContext = context;
 		phenndDB = new PHENNDDbOpenHelper(context, PHENNDDbOpenHelper.DATABASE_NAME, null, PHENNDDbOpenHelper.DATABASE_VERSION);
 	}
 	
@@ -168,6 +170,7 @@ public class DataManager {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				
+				// Parse the feed.
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				NodeList rss = docEle.getElementsByTagName("item");
@@ -205,6 +208,18 @@ public class DataManager {
 						}
 					}
 			}
+			
+			NotificationManager notificationManager;
+			notificationManager = (NotificationManager)appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+			int icon = R.drawable.ic_launcher;
+			Integer countUpdated = Integer.valueOf(updatedCount);
+			String tickerText = "New PHENND Update Articles";
+			long when = System.currentTimeMillis();
+			Notification notification = new Notification(icon, tickerText, when); // This is deprecated, but the alternative isn't available in most of the API versions we target
+			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+			// MAKE A PENDING INTENT AND PASS IT IN HERE
+			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", null);
+			notificationManager.notify(1, notification);
 			return changed;
 		}
 	}
