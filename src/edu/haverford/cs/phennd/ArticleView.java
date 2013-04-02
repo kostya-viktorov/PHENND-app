@@ -1,6 +1,7 @@
 package edu.haverford.cs.phennd;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
@@ -15,6 +16,11 @@ public class ArticleView extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article_view);
+
+		ActionBar actionBar = getActionBar();
+        actionBar.setTitle("Article");
+        actionBar.setSubtitle("PHENND Update");
+        
 		Bundle extras = getIntent().getExtras();
 		final TextView articleTitle = (TextView) findViewById(R.id.textViewArticleTitle);
 		final String articleName = extras.getString("Name");

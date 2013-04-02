@@ -3,6 +3,7 @@ package edu.haverford.cs.phennd;
 import java.util.List;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -17,42 +18,11 @@ public class ArticleList extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites_view);
-		
-        final Button mainViewButton3 = (Button) findViewById(R.id.buttonMain3);		
-        mainViewButton3.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), MainActivity.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
 
-        final Button tagsViewButton3 = (Button) findViewById(R.id.buttonTags3);
-        tagsViewButton3.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), TagView.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
-        
-        final Button settingsViewButton3 = (Button) findViewById(R.id.buttonSettings3);
-        settingsViewButton3.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), SettingsView.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
+		ActionBar actionBar = getActionBar();
+        actionBar.setTitle("Articles");
+        actionBar.setSubtitle("PHENND Update");
+
         
 		List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         		ListView listView = (ListView) findViewById(R.id.listView1);
