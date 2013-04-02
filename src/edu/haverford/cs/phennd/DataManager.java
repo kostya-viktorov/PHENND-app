@@ -34,7 +34,14 @@ public class DataManager {
 	private static String[] tags = {"e","f","g","h","i"}; // TODO: same
 	private static URL url; 
 	private static PHENNDDbOpenHelper phenndDB;
+	private static DataManager self = null;
 
+	public static DataManager getDataManager(Context context) {
+		if (self == null) {
+			self = new DataManager(context);
+		}
+		return self;
+	}
 	
 	public static List<String> getFlaggedTags(){
 		flaggedTags.add("Test");
@@ -108,8 +115,7 @@ public class DataManager {
 		phenndDB = new PHENNDDbOpenHelper(context, PHENNDDbOpenHelper.DATABASE_NAME, null, PHENNDDbOpenHelper.DATABASE_VERSION);
 	}
 	
-	public static boolean updateArticles() {
-
+	public static NodeList pullData() {
 		try {
 			url = new URL("http://updates.phennd.org/feed");
 			URLConnection connection = url.openConnection();
@@ -126,24 +132,41 @@ public class DataManager {
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				NodeList rss = docEle.getElementsByTagName("item");
-				if (rss.getLength() == 0) {
-					Log.i("PHENND","No RSS element.");
-					return false;
-				}
-				else {
-					for (int i = 0; i < rss.getLength(); i++) {
-						Node item = rss.item(i);
-							if (isNewArticle(item)) {
-								articles.add(newArticle(item));
-							}
-					}
-					return true;
-				}
+				return rss;
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			Log.i("PHENND","URL Exception:" + e);
 		}
-		return false;
+		return null;
+	}
+		
+
+	public static boolean buildArticles(NodeList rss) {
+		if (rss == null) {
+			return false;
+		}
+		if (rss.getLength() == 0) {
+			Log.i("PHENND","No RSS element.");
+			return false;
+		}
+		else {
+			boolean changed = false;
+			for (int i = 0; i < rss.getLength(); i++) {
+				Node item = rss.item(i);
+					if (isNewArticle(item)) {
+						changed = true;
+						articles.add(newArticle(item));
+					}
+			}
+			return changed;
+		}
+	}
+	
+	public static boolean updateArticles() {
+
+				NodeList rss = pullData();
+				return buildArticles(rss);
 	}
 	
 	public static boolean isNewArticle(Node item) {

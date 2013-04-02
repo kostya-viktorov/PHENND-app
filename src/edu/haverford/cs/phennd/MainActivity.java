@@ -1,11 +1,17 @@
 package edu.haverford.cs.phennd;
 
+import edu.haverford.cs.phennd.NotificationService;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -119,6 +125,22 @@ public class MainActivity<T> extends Activity {
         });
         
     }
+	public void onResume() {
+	    super.onResume();
+	 /* TODO: make this match what we want...
+	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    int minutes = prefs.getInt("interval", 1);
+	    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+	    Intent i = new Intent(this, NotificationService.class);
+	    PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
+	    am.cancel(pi);
+	    // by my own convention, minutes <= 0 means notifications are disabled
+	    if (minutes > 0) {
+	        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+	            SystemClock.elapsedRealtime() + minutes*60*1000,
+	            minutes*60*1000, pi);
+	    } */
+	}
 
 
 }
