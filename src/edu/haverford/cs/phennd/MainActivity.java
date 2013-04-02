@@ -13,12 +13,13 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity {
 	
-	DataManager dataManager = new DataManager();
+	DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dataManager = new DataManager(getBaseContext());
 
         String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
 		ListView listView = (ListView) findViewById(R.id.listView1);
