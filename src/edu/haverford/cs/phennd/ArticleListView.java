@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -22,45 +23,13 @@ public class ArticleListView extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article_list_view);
+        ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle("PHENND Update");
+        
 		Bundle extras = getIntent().getExtras();
 		String tagsOrCategories = extras.getString("TagsOrCategories");
 		String metaInfo = extras.getString("MetaInfo");
 		
-        final Button mainViewButtonList = (Button) findViewById(R.id.buttonMainList);
-		mainViewButtonList.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), MainActivity.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
-		
-        final Button tagsViewButtonList = (Button) findViewById(R.id.buttonTagsList);
-		tagsViewButtonList.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), TagView.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
-		
-		final Button settingsViewButtonList = (Button) findViewById(R.id.buttonSettingsList);
-        settingsViewButtonList.setOnClickListener(
-                new View.OnClickListener()
-                {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            Intent intent = new Intent(v.getContext(), SettingsView.class);
-                            startActivityForResult(intent, 0);
-                        }
-                });
 	
 		final ListView listOfStories = (ListView)findViewById(R.id.listViewList);
 
@@ -77,9 +46,11 @@ public class ArticleListView extends Activity {
        
 		List<String> articles = new ArrayList<String>();
 		if (tagsOrCategories.equals("Tags")) {
-        		articles = DataManager.getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+			actionBar.setTitle("Articles By Tag");
+			articles = DataManager.getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         } else if (tagsOrCategories.equals("Categories")) {
-        		articles = DataManager.getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        	actionBar.setTitle("Articles By Category");
+			articles = DataManager.getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         }
       
         ListView listView = (ListView) findViewById(R.id.listViewList);		
