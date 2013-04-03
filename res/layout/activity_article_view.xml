@@ -10,7 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textSize="20sp"
         android:layout_marginTop="105dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
         android:text="Article title here!" />
     
     <TextView
@@ -20,6 +23,8 @@
         android:layout_below="@+id/textViewArticleTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="55dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginRight="55dp"
         android:text="Article text here!" 
 	    android:onClick="onFavoriteCheckboxClicked"/>
 
@@ -29,6 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
         android:text="Add To Favorites" />
  
 </RelativeLayout>
