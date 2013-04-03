@@ -1,30 +1,27 @@
 package edu.haverford.cs.phennd;
 
-import edu.haverford.cs.phennd.FavoritesView.TabListener;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
+import java.util.ArrayList;
+
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class SettingsView extends Activity {
-	private ListView listViewSettings;
+	private ListView listViewCats;
+	private ListView listViewTags;
 	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
+	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
 	SharedPreferences prefs;
 	
 	class TabListener implements ActionBar.TabListener {
@@ -95,44 +92,74 @@ public class SettingsView extends Activity {
         actionBar.selectTab(tabSettings);
         
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		listViewSettings = (ListView) findViewById(R.id.listViewSettingsTags);
+        listViewCats = (ListView) findViewById(R.id.listViewCats);
+        listViewTags = (ListView) findViewById(R.id.listViewTags);
 		
 
 		
 		
 		// Filling the ListView with Strings
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_categories);
-		listViewSettings.setAdapter(adapter);
-		listViewSettings.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		ArrayAdapter<String> adapterCats = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_categories);
+		listViewCats.setAdapter(adapterCats);
+		listViewCats.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		// Checking the appropriate boxes
 		Boolean thisBoolean;
 		for (int i=0;i<all_categories.length;i++) {
 			thisBoolean = prefs.getBoolean(all_categories[i], true);
-			listViewSettings.setItemChecked(i, thisBoolean);
+			listViewCats.setItemChecked(i, thisBoolean);
+	    }
+		
+		// Filling the ListView with Strings
+		ArrayAdapter<String> adapterTags = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_tags);
+		listViewTags.setAdapter(adapterTags);
+		listViewTags.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		for (int i=0;i<all_tags.length;i++) {
+			thisBoolean = prefs.getBoolean(all_tags[i], true);
+			listViewTags.setItemChecked(i, thisBoolean);
 	    }
 		
 	
         final CheckBox enableNotifications = (CheckBox) findViewById(R.id.checkbox_enable_notifications);
         enableNotifications.setChecked(true);
-        
+
 	}
 	
 	public void onPause() {
 		super.onPause();
 		SharedPreferences.Editor editor = prefs.edit();
+
+		// updates categories info
 		for(int i = 0; i < all_categories.length; i ++) {
 			editor.putBoolean(all_categories[i], false);
 		}
-		SparseBooleanArray checkedItems = listViewSettings.getCheckedItemPositions();
-		if (checkedItems != null) {
-			for (int i = 0; i < checkedItems.size(); i++) {
-				if(checkedItems.valueAt(i)) {
+		SparseBooleanArray checkedCats = listViewCats.getCheckedItemPositions();
+		if (checkedCats != null) {
+			for (int i = 0; i < checkedCats.size(); i++) {
+				if(checkedCats.valueAt(i)) {
 					editor.putBoolean(all_categories[i], true);
 				}
 			}
 		}
+		
+		// updates flags info
+		ArrayList<String> flagsToAdd = new ArrayList<String>();
+		for(int i = 0; i < all_tags.length; i ++) {
+			editor.putBoolean(all_tags[i], false);
+		}
+		SparseBooleanArray checkedTags = listViewTags.getCheckedItemPositions();
+		if (checkedTags != null) {
+			for (int i = 0; i < checkedTags.size(); i++) {
+				if(checkedTags.valueAt(i)) {
+					editor.putBoolean(all_tags[i], true);
+					flagsToAdd.add(all_tags[i]);
+				}
+			}
+		}
+		
 		editor.apply();
+		DataManager.setFlaggedTags(flagsToAdd);
 		
 	}
 
@@ -143,12 +170,12 @@ public class SettingsView extends Activity {
 		((CheckBox) view).setChecked(checked);
 	}
 	
-	public void update_preferences(String category, Boolean value) {
-		SharedPreferences.Editor editor = prefs.edit();
-		
-		editor.putBoolean(category, value);
-		
-		editor.apply();
+	public void setCats(View view) {
+		return;
+	}
+	
+	public void setTags(View view) {
+		return;
 	}
 
 }

@@ -25,6 +25,9 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivity<T> extends Activity {
 	
 	DataManager dataManager;
+	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
+	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
+	
 
 	class TabListener implements ActionBar.TabListener {
     	private Activity activity;
@@ -94,10 +97,9 @@ public class MainActivity<T> extends Activity {
         actionBar.selectTab(tabCategory);
         
         
-        String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
-        
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         updateCategories(prefs, all_categories);
+        updateTags(prefs, all_tags);
         
         String[] wantedCategories = getWantedCategories(prefs, all_categories);
         
@@ -155,11 +157,24 @@ public class MainActivity<T> extends Activity {
 		SharedPreferences.Editor editor = prefs.edit();
 		
         //puts categories into SharedPreferences if need be
-        if (!prefs.getBoolean("haveRun", false)) {
+        if (!prefs.getBoolean("haveRunCats", false)) {
         	for(int i = 0; i < categories.length; i++) {
         		editor.putBoolean(categories[i], true);
         	}
-        	editor.putBoolean("haveRun", true);
+        	editor.putBoolean("haveRunCats", true);
+        }
+        editor.apply();
+	}
+	
+	public void updateTags(SharedPreferences prefs, String[] tags) {
+		SharedPreferences.Editor editor = prefs.edit();
+		
+        //puts categories into SharedPreferences if need be
+        if (!prefs.getBoolean("haveRunTags", false)) {
+        	for(int i = 0; i < tags.length; i++) {
+        		editor.putBoolean(tags[i], true);
+        	}
+        	editor.putBoolean("haveRunTags", true);
         }
         editor.apply();
 	}

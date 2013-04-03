@@ -1,44 +1,54 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_choices"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SettingsView" >
+	android:layout_height="wrap_content"
+	tools:context=".SettingsView" >
+     
+   <CheckBox
+	   	android:id="@+id/checkbox_enable_notifications"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:layout_marginTop="35dp"
+	   	android:layout_marginLeft="35dp"
+	   	android:text="Enable Notifications"
+	   	android:onClick="onEnableNotificationsClicked" />
 
-    <LinearLayout
-        android:id="@+id/settings_choices"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+	   android:layout_marginTop="25dp"
+	   android:layout_marginLeft="55dp"
+	   android:layout_marginRight="55dp"
+       android:layout_gravity="center_horizontal"
+       android:textSize="30sp"
+       android:text="Categories I Am Interested In:" />
+   
+	<ListView
+	   	android:id="@+id/listViewCats"
+	   	android:layout_width="match_parent"
+	   	android:layout_height="wrap_content"
+	   	android:layout_marginTop="10dp"
+	   	android:layout_weight="1" />
+	
+	<TextView
         android:layout_width="match_parent"
-    	android:layout_height="match_parent">
-    	
-        <CheckBox
-        	android:id="@+id/checkbox_enable_notifications"
-        	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:layout_marginTop="35dp"
-        	android:layout_marginLeft="35dp"
-        	android:text="Enable Notifications"
-        	android:onClick="onEnableNotificationsClicked" />
+        android:layout_height="wrap_content"
+    	android:layout_marginTop="25dp"
+    	android:layout_marginLeft="55dp"
+    	android:layout_marginRight="55dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="30sp"
+        android:text="Tags I Am Interested In:" />
     
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        	android:layout_marginLeft="55dp"
-            android:layout_gravity="center_horizontal"
-            android:textSize="30sp"
-            android:text="Categories I Am Interested In:" />
-        
-    	<ListView
-        	android:id="@+id/listViewSettingsTags"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content" />
-    
-    	<TextView
-    	    android:id="@+id/testing"
-    	    android:layout_height="wrap_content"
-    	    android:layout_width="match_parent"/>
-    </LinearLayout>
+	<ListView
+    	android:id="@+id/listViewTags"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginTop="10dp"
+    	android:layout_weight="2" />
 
- 
-    
-</RelativeLayout>
+</LinearLayout>
