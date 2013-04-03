@@ -69,11 +69,11 @@ public class SettingsView extends Activity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         Tab tabCategory = actionBar.newTab();
-        tabCategory.setText("Categories").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this,0));
+        tabCategory.setText("Categories").setIcon(R.drawable.shelficon).setTabListener(new TabListener(this,0));
         Tab tabFavorites = actionBar.newTab();
-        tabFavorites.setText("Favorites").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 1));
+        tabFavorites.setText("Favorites").setIcon(R.drawable.staricon).setTabListener(new TabListener(this, 1));
         Tab tabTags = actionBar.newTab();
-        tabTags.setText("Tags").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 2));
+        tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new TabListener(this, 2));
         Tab tabSettings = actionBar.newTab();
         tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
 
