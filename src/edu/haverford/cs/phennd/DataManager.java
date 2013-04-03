@@ -17,6 +17,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,22 +26,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 /* test */
 public class DataManager {
-	private static Date lastUpdate;
+	private static Date lastUpdate = new Date(0);
 	private static List<String> allTags = new ArrayList<String>();
 	private static List<String> flaggedTags = new ArrayList<String>();
 	private static List<String> favoriteUIDs = new ArrayList<String>();
 	private static List<ArticleData> articles = new ArrayList<ArticleData>();
 	private static List<String> favoriteNames = new ArrayList<String>();
-	private static String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"}; // TODO: Import this from some XML
-	private static String[] tags = {"e","f","g","h","i"}; // TODO: same
+	private static String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
+	private static String[] tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
 	private static URL url; 
 	private static PHENNDDbOpenHelper phenndDB;
 	private static DataManager self = null;
 	private static int updatedCount = 0;
 	private static List<String> updatedTitles = new ArrayList<String>();
+	private static Context appContext;
 	
-
-
 	public static DataManager getDataManager(Context context) {
 		if (self == null) {
 			self = new DataManager(context);
@@ -116,12 +117,49 @@ public class DataManager {
 	}
 	
 	public DataManager(Context context) {
+		DataManager.appContext = context;
 		phenndDB = new PHENNDDbOpenHelper(context, PHENNDDbOpenHelper.DATABASE_NAME, null, PHENNDDbOpenHelper.DATABASE_VERSION);
 	}
 	
+	public static void updateCategories() {
+		NodeList catsXml =  pullData("http://walnut.fig.haverford.edu/phennd/categories.xml");
+		List<String> newCats = new ArrayList<String>();
+		if (catsXml!= null && catsXml.getLength() != 0) {
+			for (int i = 0; i < catsXml.getLength(); i++) {
+				if (!has(categories, catsXml.item(i).getTextContent())) {
+					newCats.add(catsXml.item(i).getTextContent());
+				}
+			}
+			for (int i = 0; i < categories.length; i++) {
+				newCats.add(categories[i]);
+			}
+			categories = (String[]) newCats.toArray();
+		}
+	}
+	
+	public static void updateTags() {
+		NodeList tagsXml = pullData("http://walnut.fig.haverford.edu/phennd/tags.xml");
+		List<String> newTags = new ArrayList<String>();
+		if (tagsXml != null && tagsXml.getLength() != 0) {
+			for (int i = 0; i < tagsXml.getLength(); i++) {
+				if (!has(tags, tagsXml.item(i).getTextContent())) {
+					newTags.add(tagsXml.item(i).getTextContent());
+				}	
+			}
+			for (int i = 0; i < tags.length; i++) {
+				newTags.add(tags[i]);
+			}
+			tags = (String[]) newTags.toArray();
+		}
+	}
+
 	public static NodeList pullData() {
+		return pullData("http://updates.phennd.org/feed");
+	}
+	public static NodeList pullData(String target) {
+		
 		try {
-			url = new URL("http://updates.phennd.org/feed");
+			url = new URL(target);
 			URLConnection connection = url.openConnection();
 			
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
@@ -132,10 +170,11 @@ public class DataManager {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				
-				// Parse the weather feed.
+				// Parse the feed.
 				Document dom = db.parse(in);
 				Element docEle = dom.getDocumentElement();
 				NodeList rss = docEle.getElementsByTagName("item");
+				lastUpdate = new Date();
 				return rss;
 			}
 		}
@@ -169,6 +208,18 @@ public class DataManager {
 						}
 					}
 			}
+			
+			NotificationManager notificationManager;
+			notificationManager = (NotificationManager)appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+			int icon = R.drawable.ic_launcher;
+			Integer countUpdated = Integer.valueOf(updatedCount);
+			String tickerText = "New PHENND Update Articles";
+			long when = System.currentTimeMillis();
+			Notification notification = new Notification(icon, tickerText, when); // This is deprecated, but the alternative isn't available in most of the API versions we target
+			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+			// MAKE A PENDING INTENT AND PASS IT IN HERE
+			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", null);
+			notificationManager.notify(1, notification);
 			return changed;
 		}
 	}
@@ -176,6 +227,8 @@ public class DataManager {
 	public static boolean updateArticles() {
 
 				NodeList rss = pullData();
+				updateCategories();
+				updateTags();
 				return buildArticles(rss);
 	}
 	
@@ -272,9 +325,6 @@ public class DataManager {
 		return vals;
 	}
 
-
-	// Methods which need to be added for listviews:
-	
 	public static List<String> getArticleTitlesForTag(String tagName)
 	{
 		List<String> titles = new ArrayList<String>();
@@ -346,6 +396,7 @@ public class DataManager {
 		updatedCount = 0;
 		updatedTitles.clear();
 	}
+
 	
 	/* Quote from info passed along to Dan
 	 * I added the background service, which updates the list of articles. 
