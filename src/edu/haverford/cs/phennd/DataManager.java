@@ -340,8 +340,8 @@ public class DataManager {
 		
 		Cursor cursor = db.query(PHENNDDbOpenHelper.DATABASE_NAME, resultsCol, queryString, null, null, null, null);*/
 		String query = "select " + PHENNDDbOpenHelper.COL_TITLE + " from " + PHENNDDbOpenHelper.DATABASE_TABLE + " where " + 
-				PHENNDDbOpenHelper.COL_TAGS + " LIKE '%?%'";
-		Cursor cursor = db.rawQuery(query, new String[] {tagName});
+				PHENNDDbOpenHelper.COL_TAGS + " LIKE ?";
+		Cursor cursor = db.rawQuery(query, new String[] {"%"+tagName+"%"});
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
 			String title = extract(cursor, PHENNDDbOpenHelper.COL_TITLE);
@@ -380,30 +380,33 @@ public class DataManager {
 	}
 	public static void addFavorite(String title) {
 		ArticleData article = getArticle(title);
-		if (article != null) { 
+		if (article != null && !article.isFavorited()) { 
 			article.setFavorited(true);
 		}
-		ContentValues updatedValues = new ContentValues();
-		updatedValues.put(PHENNDDbOpenHelper.COL_FAVORITED, "1");
-		
-		String where = PHENNDDbOpenHelper.COL_TITLE + "=" + dbClean(title);
-		String whereArgs[] = null;
+		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set " + PHENNDDbOpenHelper.COL_FAVORITED + "=0 where " +
+				PHENNDDbOpenHelper.COL_TITLE + "= ?";
 		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.update(PHENNDDbOpenHelper.DATABASE_TABLE, updatedValues, where, whereArgs);
+		db.rawQuery(query, new String[] {title} ); 
 		favoriteNames.add(title);
 	}
 	public static void removeFavorite(String title) {
 		ArticleData article = getArticle(title);
-		if (article != null) { 
+		if (article != null && article.isFavorited()) { 
 			article.setFavorited(false);
 		}
-		ContentValues updatedValues = new ContentValues();
+		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set " + PHENNDDbOpenHelper.COL_FAVORITED + "=1 where " +
+		PHENNDDbOpenHelper.COL_TITLE + "= ?";
+		SQLiteDatabase db = phenndDB.getWritableDatabase();
+		db.rawQuery(query, new String[] {title} ); 
+		/*		ContentValues updatedValues = new ContentValues();
 		updatedValues.put(PHENNDDbOpenHelper.COL_FAVORITED, "0");
 		String where = PHENNDDbOpenHelper.COL_TITLE + "=" + dbClean(title);
-		String whereArgs[] = null;
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
+		String whereArgs[] = null; 
+
 		db.update(PHENNDDbOpenHelper.DATABASE_TABLE, updatedValues, where, whereArgs);
+		*/
 		favoriteNames.remove(favoriteNames.indexOf(title));
+		
 	}
 	
 	public static int getUpdatedCount() {
