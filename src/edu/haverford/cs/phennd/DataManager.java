@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.util.Log;
 /* test */
 public class DataManager {
@@ -49,8 +50,11 @@ public class DataManager {
 	}
 	
 	public static List<String> getFlaggedTags(){
-		flaggedTags.add("Test");
 		return flaggedTags;
+	}
+	
+	public static void setFlaggedTags(List<String> newFlags) {
+		flaggedTags = newFlags;
 	}
 
 	public static List<String> getFavorites(){
