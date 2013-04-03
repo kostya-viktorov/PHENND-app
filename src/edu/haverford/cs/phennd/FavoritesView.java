@@ -81,8 +81,9 @@ public class FavoritesView extends Activity {
         Tab tabTags = actionBar.newTab();
         tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new TabListener(this, 2));
         Tab tabSettings = actionBar.newTab();
-        tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
-
+        //tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
+        tabSettings.setText("Settings").setTabListener(new TabListener(this, 3));
+        
         actionBar.addTab(tabFavorites, true);
         actionBar.addTab(tabCategory, 0, false);
         actionBar.addTab(tabTags, 2, false);

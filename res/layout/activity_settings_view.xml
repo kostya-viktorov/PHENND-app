@@ -15,13 +15,17 @@
         	android:id="@+id/checkbox_enable_notifications"
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
+        	android:layout_marginTop="35dp"
+        	android:layout_marginLeft="35dp"
         	android:text="Enable Notifications"
         	android:onClick="onEnableNotificationsClicked" />
     
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+        	android:layout_marginLeft="55dp"
             android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
             android:text="Tags I Am Interested In:" />
         
     	<ListView
@@ -29,6 +33,10 @@
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content" />
     
+    	<TextView
+    	    android:id="@+id/testing"
+    	    android:layout_height="wrap_content"
+    	    android:layout_width="match_parent"/>
     </LinearLayout>
 
  
