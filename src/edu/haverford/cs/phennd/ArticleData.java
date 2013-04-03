@@ -1,5 +1,6 @@
 package edu.haverford.cs.phennd;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleData {
@@ -62,11 +63,16 @@ public class ArticleData {
 	
 	
 	public void setTags(String _tags) {
-		String[] split = _tags.split(",");
-		for (int i = 0; i < split.length; i++) {
-			tags.clear();
-			tags.add(split[i]);
+		if (_tags == null) {
+			return;
 		}
+		String[] split = _tags.split(",");
+		List<String> newTags = new ArrayList<String>();
+		if (split == null) { return; }
+		for (int i = 0; i < split.length; i++) {
+			newTags.add(split[i]);
+		}
+		tags = newTags;
 	}
 	public void addTag(String tag) {
 		tags.add(tag);
