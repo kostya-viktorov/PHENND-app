@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,7 +25,8 @@ import android.widget.AdapterView.OnItemClickListener;
 public class SettingsView extends Activity {
 	private ListView listViewSettings;
 	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
-
+	SharedPreferences prefs;
+	
 	class TabListener implements ActionBar.TabListener {
     	private Activity activity;
     	private int LaunchCode;
@@ -92,7 +94,7 @@ public class SettingsView extends Activity {
         actionBar.addTab(tabTags, 2, false);
         actionBar.selectTab(tabSettings);
         
-		
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		listViewSettings = (ListView) findViewById(R.id.listViewSettingsTags);
 		
 
@@ -100,40 +102,41 @@ public class SettingsView extends Activity {
 		
 		// Filling the ListView with Strings
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_categories);
-		listViewSettings.setAdapter(adapter); 
+		listViewSettings.setAdapter(adapter);
+		listViewSettings.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+		// Checking the appropriate boxes
+		Boolean thisBoolean;
+		for (int i=0;i<all_categories.length;i++) {
+			thisBoolean = prefs.getBoolean(all_categories[i], true);
+			listViewSettings.setItemChecked(i, thisBoolean);
+	    }
 		
-		listViewSettings.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> a, View view, int position, long id) {
-
-				      CheckedTextView check = (CheckedTextView)view;
-				      check.toggle();
-				      update_preferences((String)check.getText(), check.isChecked());
-
-				}
-		});
-		
-
-
+	
         final CheckBox enableNotifications = (CheckBox) findViewById(R.id.checkbox_enable_notifications);
         enableNotifications.setChecked(true);
         
-        TextView testing = (TextView) findViewById(R.id.testing);
-        testing.setText("" + listViewSettings.getChildCount());
-        setSomeBoxes(listViewSettings);
+	}
+	
+	public void onPause() {
+		super.onPause();
+		SharedPreferences.Editor editor = prefs.edit();
+		for(int i = 0; i < all_categories.length; i ++) {
+			editor.putBoolean(all_categories[i], false);
+		}
+		SparseBooleanArray checkedItems = listViewSettings.getCheckedItemPositions();
+		if (checkedItems != null) {
+			for (int i = 0; i < checkedItems.size(); i++) {
+				if(checkedItems.valueAt(i)) {
+					editor.putBoolean(all_categories[i], true);
+				}
+			}
+		}
+		editor.apply();
+		
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-	
-	public void setSomeBoxes(ListView list) {
-		int some_index = list.getFirstVisiblePosition();
-		CheckedTextView some_item = (CheckedTextView)list.getChildAt(some_index);
-		if (some_item != null)
-			some_item.toggle();
-	}
-	
+		
 	public void onEnableNotificationsClicked(View view) {
 		boolean checked = ((CheckBox) view).isChecked();
 		
@@ -141,7 +144,6 @@ public class SettingsView extends Activity {
 	}
 	
 	public void update_preferences(String category, Boolean value) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
 		
 		editor.putBoolean(category, value);
