@@ -98,7 +98,7 @@ public class MainActivity<T> extends Activity {
 		listView.setAdapter(adapter); 
        
        
-       // I think that this is why sometimes articles don't load - I might be crazy (KV)
+
        Thread t = new Thread() { 
     	   @Override
     	   public void run() {
