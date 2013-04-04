@@ -19,8 +19,10 @@ import java.util.ArrayList;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
@@ -221,15 +223,17 @@ public class DataManager {
 			}
 			
 			NotificationManager notificationManager;
+			Intent intent = new Intent(appContext, MainActivity.class);
+			PendingIntent pIntent = PendingIntent.getActivity(appContext, 0, intent, 0);
 			notificationManager = (NotificationManager)appContext.getSystemService(Context.NOTIFICATION_SERVICE);
 			int icon = R.drawable.ic_launcher;
 			Integer countUpdated = Integer.valueOf(updatedCount);
 			String tickerText = "New PHENND Update Articles";
 			long when = System.currentTimeMillis();
-			Notification notification = new Notification(icon, tickerText, when); // This is deprecated, but the alternative isn't available in most of the API versions we target
+			// This is deprecated, but the alternative (Notification Builder) isn't available in most of the API versions we target
+			Notification notification = new Notification(icon, tickerText, when); 
 			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
-			// MAKE A PENDING INTENT AND PASS IT IN HERE
-			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", null);
+			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", pIntent);
 			notificationManager.notify(1, notification);
 			return changed;
 		}
