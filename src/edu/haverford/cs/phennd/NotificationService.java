@@ -77,7 +77,8 @@ public class NotificationService extends Service {
         @Override
         protected Void doInBackground(Void... params) {
             // TODO: do stuff!
-        	DataManager.buildArticles(DataManager.pullData());
+        	DataManager dm = DataManager.getDataManager(getBaseContext());
+        	dm.buildArticles(DataManager.pullData());
             return null;
         }
         

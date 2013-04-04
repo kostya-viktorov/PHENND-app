@@ -113,7 +113,7 @@ public class MainActivity<T> extends Activity {
        Thread t = new Thread() { 
     	   @Override
     	   public void run() {
-    	        DataManager.updateArticles();
+    	        dataManager.updateArticles();
     	   }
        };
        t.start();
