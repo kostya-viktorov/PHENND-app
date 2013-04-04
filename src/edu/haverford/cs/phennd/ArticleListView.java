@@ -44,13 +44,14 @@ public class ArticleListView extends Activity {
             }
         });
        
+		DataManager dm = DataManager.getDataManager(getBaseContext());
 		List<String> articles = new ArrayList<String>();
 		if (tagsOrCategories.equals("Tags")) {
 			actionBar.setTitle("Articles By Tag");
-			articles = DataManager.getArticleTitlesForTag(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+			articles = dm.getArticleTitlesForTag(metaInfo);
         } else if (tagsOrCategories.equals("Categories")) {
         	actionBar.setTitle("Articles By Category");
-			articles = DataManager.getArticleTitlesForCategory(metaInfo); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+			articles = dm.getArticleTitlesForCategory(metaInfo); 
         }
       
         ListView listView = (ListView) findViewById(R.id.listViewList);		

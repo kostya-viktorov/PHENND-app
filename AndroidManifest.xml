@@ -9,7 +9,7 @@
         android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
 
     <application
         android:allowBackup="true"
@@ -40,6 +40,15 @@
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
                 <action android:name="edu.haverford.cs.phennd.FavoritesView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="edu.haverford.cs.phennd.AboutUsView"
+            android:label="@string/title_activity_about_us"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.AboutUsView" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

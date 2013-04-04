@@ -49,12 +49,6 @@ public class ArticleData {
 	
 	public void setFavorited(boolean f) {
 		favorited = f;
-		if (f) {
-			DataManager.addFavorite(this.title);
-		}
-		else {
-			DataManager.removeFavorite(this.title);
-		}
 	}
 	
 	public boolean isFavorited() {
