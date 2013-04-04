@@ -10,13 +10,14 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class ArticleView extends Activity {
+	DataManager dm;
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_article_view);
-
+		dm = DataManager.getDataManager(getBaseContext());
 		ActionBar actionBar = getActionBar();
         actionBar.setTitle("Article");
         actionBar.setSubtitle("PHENND Update");
@@ -26,7 +27,7 @@ public class ArticleView extends Activity {
 		final TextView articleText = (TextView)findViewById(R.id.textViewArticleText);
 		final String articleName = extras.getString("Name");
 		articleTitle.setText(articleName);	
-		final ArticleData article = DataManager.getArticle(articleName);
+		final ArticleData article = dm.getArticle(articleName);
 
 		articleText.setText(article.getContent());
 		
@@ -40,8 +41,11 @@ public class ArticleView extends Activity {
 				    boolean checked = ((CheckBox) v).isChecked();
 				    // Get an ArticleData object from DataManager; call setFavorited(boolean f) on the ArticleData with the value of checked
 				    
-				    article.setFavorited(checked);
-				    if (article.isFavorited() == true) {
+				    
+				    if (checked) {
+				    	dm.addFavorite(article.getTitle());
+				    }
+ 				    if (article.isFavorited() == true) {
 				    	System.out.println("Article is favorited, do stuff here.");
 				    } else {
 				    	System.out.println("Article is unfavorited, do stuff here.");
