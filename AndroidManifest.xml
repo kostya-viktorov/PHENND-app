@@ -42,6 +42,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="edu.haverford.cs.phennd.AboutUsView"
+            android:label="@string/title_activity_about_us"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="edu.haverford.cs.phennd.AboutUsView" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="edu.haverford.cs.phennd.ArticleView"
             android:label="@string/title_activity_article_view"
             android:uiOptions="splitActionBarWhenNarrow">
