@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.util.Log;
 /* test */
 public class DataManager {
@@ -49,8 +50,11 @@ public class DataManager {
 	}
 	
 	public static List<String> getFlaggedTags(){
-		flaggedTags.add("Test");
 		return flaggedTags;
+	}
+	
+	public static void setFlaggedTags(List<String> newFlags) {
+		flaggedTags = newFlags;
 	}
 
 	public static List<String> getFavorites(){
@@ -75,7 +79,7 @@ public class DataManager {
 		
 		
 		SQLiteDatabase db = phenndDB.getReadableDatabase();
-		String[] results_columns = new String[] { 
+		/*String[] results_columns = new String[] { 
 				PHENNDDbOpenHelper.COL_URL, PHENNDDbOpenHelper.COL_PUBDATE, PHENNDDbOpenHelper.COL_CONTENTS, PHENNDDbOpenHelper.COL_TITLE,
 				PHENNDDbOpenHelper.COL_CREATOR, PHENNDDbOpenHelper.COL_CATEGORY, PHENNDDbOpenHelper.COL_EVENTDATE, 
 				PHENNDDbOpenHelper.COL_EVENTLOCATION, PHENNDDbOpenHelper.COL_FAVORITED};
@@ -87,6 +91,12 @@ public class DataManager {
 		String order = null;
 		
 		Cursor cursor = db.query(PHENNDDbOpenHelper.DATABASE_TABLE, results_columns, where, whereArgs, groupBy, having, order);
+		*/
+		String query = "select " + PHENNDDbOpenHelper.COL_URL +", "  +PHENNDDbOpenHelper.COL_PUBDATE + ", " +PHENNDDbOpenHelper.COL_CONTENTS + ", " + PHENNDDbOpenHelper.COL_TITLE + ", "
+                +PHENNDDbOpenHelper.COL_CREATOR + ", " + PHENNDDbOpenHelper.COL_CATEGORY + ", " + PHENNDDbOpenHelper.COL_EVENTDATE + ", "
+                + PHENNDDbOpenHelper.COL_EVENTLOCATION+ ",  " + PHENNDDbOpenHelper.COL_FAVORITED + " from "
+                + PHENNDDbOpenHelper.DATABASE_TABLE + " where " + PHENNDDbOpenHelper.COL_TITLE + "=?";
+        Cursor cursor = db.rawQuery(query, new String[] {title});
 		if (cursor.getCount() != 1) { return null;  } // No article in DB  
 		else { // Build and cache in memory
 			ArticleData article;
@@ -107,12 +117,13 @@ public class DataManager {
 	}
 	
 	private static String extract(Cursor cursor, String col) {
-		int idx = cursor.getColumnIndex(col); 
-		if ( idx > -1) {
-			return cursor.getString(idx);
+		
+		int idx = cursor.getColumnIndex(col);
+		if ( idx < 0) {
+			return "";
 		}
 		else {
-			return "";
+			return cursor.getString(idx);
 		}
 	}
 	
@@ -149,7 +160,7 @@ public class DataManager {
 			for (int i = 0; i < tags.length; i++) {
 				newTags.add(tags[i]);
 			}
-			tags = (String[]) newTags.toArray();
+			tags = newTags.toArray(new String[newTags.size()]);
 		}
 	}
 
@@ -235,16 +246,15 @@ public class DataManager {
 	public static boolean isNewArticle(Node item) {
 		Element e = (Element)item;
 		String title = extractValue(e, "title");
-		
-		if (getArticle(title) == null ) {
+		if (getArticle(title) != null ) {
 			return false;
-		}		
+		}
 		return true;
 	}
 	
 	private static boolean has(String[] space, String target) {
 		for (int k = 0; k < space.length; k++) {
-			if ( space[k] == target) {
+			if ( space[k].equals(target)) {
 				return true;
 			}
 		}
@@ -320,7 +330,7 @@ public class DataManager {
 		NodeList matches = e.getElementsByTagName(tag);
 		List<String> vals = new ArrayList<String>();
 		for (int i = 0; i < matches.getLength(); i++) {
-			vals.add(matches.item(1).getTextContent());
+			vals.add(matches.item(i).getTextContent());
 		}
 		return vals;
 	}
@@ -328,16 +338,21 @@ public class DataManager {
 	public static List<String> getArticleTitlesForTag(String tagName)
 	{
 		List<String> titles = new ArrayList<String>();
-		String[] resultsCol = {"title"};
-		String queryString = PHENNDDbOpenHelper.COL_TAGS + " LIKE '%" + tagName + "%'";
 		SQLiteDatabase db = phenndDB.getReadableDatabase();
-		Cursor cursor = db.query(PHENNDDbOpenHelper.DATABASE_NAME, resultsCol, queryString, null, null, null, null); 
+/*		String[] resultsCol = {"title"};
+		String queryString = PHENNDDbOpenHelper.COL_TAGS + " LIKE '%" + tagName + "%'";
 		
+		Cursor cursor = db.query(PHENNDDbOpenHelper.DATABASE_NAME, resultsCol, queryString, null, null, null, null);*/
+		String query = "select " + PHENNDDbOpenHelper.COL_TITLE + " from " + PHENNDDbOpenHelper.DATABASE_TABLE + " where " + 
+				PHENNDDbOpenHelper.COL_TAGS + " LIKE ?";
+		Cursor cursor = db.rawQuery(query, new String[] {"%"+tagName+"%"});
+		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
-			String title = extract(cursor, PHENNDDbOpenHelper.COL_TAGS);
+			String title = extract(cursor, PHENNDDbOpenHelper.COL_TITLE);
 			if ( title != "") {
 				titles.add(title);
 			}
+			cursor.moveToNext();
 		}
 		return titles; // Should return a list of article titles, based on articles with the given tag
 	}
@@ -345,45 +360,57 @@ public class DataManager {
 	public static List<String> getArticleTitlesForCategory(String categoryName)
 	{
 		List<String> titles = new ArrayList<String>();
-		String[] resultsCol = {"title"};
-		String where = PHENNDDbOpenHelper.COL_CATEGORY + "=" + categoryName;
+
+		
 		
 		SQLiteDatabase db = phenndDB.getReadableDatabase();
+		/*
+		 String where = PHENNDDbOpenHelper.COL_CATEGORY + "=" + categoryName;
+		String[] resultsCol = {"title"};
 		Cursor cursor = db.query(PHENNDDbOpenHelper.DATABASE_TABLE, resultsCol, where, null, null, null, null);
+	*/
+		String query = "select " + PHENNDDbOpenHelper.COL_TITLE + " from " + PHENNDDbOpenHelper.DATABASE_TABLE + " where " + PHENNDDbOpenHelper.COL_CATEGORY + "=?";
+		Cursor cursor = db.rawQuery(query, new String[] { categoryName });
 		
+		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
-			String title = extract(cursor, PHENNDDbOpenHelper.COL_CATEGORY);
+			String title = extract(cursor, PHENNDDbOpenHelper.COL_TITLE);
 			if ( title != "") {
 				titles.add(title);
 			}
+			cursor.moveToNext();
 		}
 		return titles; // Should return a list of article titles, based on articles with the given tag
 	}
 	public static void addFavorite(String title) {
 		ArticleData article = getArticle(title);
-		if (article != null) { 
+		if (article != null && !article.isFavorited()) { 
 			article.setFavorited(true);
 		}
-		ContentValues updatedValues = new ContentValues();
-		updatedValues.put(PHENNDDbOpenHelper.COL_FAVORITED, "1");
-		String where = PHENNDDbOpenHelper.COL_TITLE + "=" + dbClean(title);
-		String whereArgs[] = null;
+		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set " + PHENNDDbOpenHelper.COL_FAVORITED + "=0 where " +
+				PHENNDDbOpenHelper.COL_TITLE + "= ?";
 		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.update(PHENNDDbOpenHelper.DATABASE_TABLE, updatedValues, where, whereArgs);
+		db.rawQuery(query, new String[] {title} ); 
 		favoriteNames.add(title);
 	}
 	public static void removeFavorite(String title) {
 		ArticleData article = getArticle(title);
-		if (article != null) { 
+		if (article != null && article.isFavorited()) { 
 			article.setFavorited(false);
 		}
-		ContentValues updatedValues = new ContentValues();
+		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set " + PHENNDDbOpenHelper.COL_FAVORITED + "=1 where " +
+		PHENNDDbOpenHelper.COL_TITLE + "= ?";
+		SQLiteDatabase db = phenndDB.getWritableDatabase();
+		db.rawQuery(query, new String[] {title} ); 
+		/*		ContentValues updatedValues = new ContentValues();
 		updatedValues.put(PHENNDDbOpenHelper.COL_FAVORITED, "0");
 		String where = PHENNDDbOpenHelper.COL_TITLE + "=" + dbClean(title);
-		String whereArgs[] = null;
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
+		String whereArgs[] = null; 
+
 		db.update(PHENNDDbOpenHelper.DATABASE_TABLE, updatedValues, where, whereArgs);
+		*/
 		favoriteNames.remove(favoriteNames.indexOf(title));
+		
 	}
 	
 	public static int getUpdatedCount() {

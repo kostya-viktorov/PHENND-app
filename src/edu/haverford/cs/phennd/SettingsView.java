@@ -1,22 +1,29 @@
 package edu.haverford.cs.phennd;
 
-import edu.haverford.cs.phennd.FavoritesView.TabListener;
-import android.os.Bundle;
+import java.util.ArrayList;
+
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class SettingsView extends Activity {
-
+	private ListView listViewCats;
+	private ListView listViewTags;
+	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
+	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
+	SharedPreferences prefs;
+	
 	class TabListener implements ActionBar.TabListener {
     	private Activity activity;
     	private int LaunchCode;
@@ -75,7 +82,8 @@ public class SettingsView extends Activity {
         Tab tabTags = actionBar.newTab();
         tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new TabListener(this, 2));
         Tab tabSettings = actionBar.newTab();
-        tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
+        //tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
+        tabSettings.setText("Settings").setTabListener(new TabListener(this, 3));
 
         actionBar.addTab(tabSettings, true);
         actionBar.addTab(tabCategory, 0, false);
@@ -83,44 +91,91 @@ public class SettingsView extends Activity {
         actionBar.addTab(tabTags, 2, false);
         actionBar.selectTab(tabSettings);
         
-		// List of Tags, copied from MainActivity
-		String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
-		ListView listViewSettings = (ListView) findViewById(R.id.listViewSettingsTags);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        listViewCats = (ListView) findViewById(R.id.listViewCats);
+        listViewTags = (ListView) findViewById(R.id.listViewTags);
 		
-		CheckBox[] categoriesCheckBoxList = new CheckBox[categories.length];
-		for (int i = 0; i < categories.length; i++) {
-			CheckBox tmpBox = new CheckBox(this);
-			tmpBox.setText(categories[i]);
-			categoriesCheckBoxList[i] = tmpBox;
-		}
+
 		
 		
 		// Filling the ListView with Strings
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
-		//listViewSettings.setAdapter(adapter); 
-		
-		// Filling the ListView with CheckBoxes
-		// Currently broked, each element is shown as a reference to the checkbox...
-		ArrayAdapter<CheckBox> checkBoxAdapter = new ArrayAdapter<CheckBox>(this, android.R.layout.simple_list_item_1, categoriesCheckBoxList);
-		listViewSettings.setAdapter(checkBoxAdapter); 
-		
+		ArrayAdapter<String> adapterCats = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_categories);
+		listViewCats.setAdapter(adapterCats);
+		listViewCats.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+		// Checking the appropriate boxes
+		Boolean thisBoolean;
+		for (int i=0;i<all_categories.length;i++) {
+			thisBoolean = prefs.getBoolean(all_categories[i], true);
+			listViewCats.setItemChecked(i, thisBoolean);
+	    }
+		
+		// Filling the ListView with Strings
+		ArrayAdapter<String> adapterTags = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, all_tags);
+		listViewTags.setAdapter(adapterTags);
+		listViewTags.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
+		for (int i=0;i<all_tags.length;i++) {
+			thisBoolean = prefs.getBoolean(all_tags[i], true);
+			listViewTags.setItemChecked(i, thisBoolean);
+	    }
+		
+	
         final CheckBox enableNotifications = (CheckBox) findViewById(R.id.checkbox_enable_notifications);
         enableNotifications.setChecked(true);
-        
+
+	}
+	
+	public void onPause() {
+		super.onPause();
+		SharedPreferences.Editor editor = prefs.edit();
+
+		// updates categories info
+		for(int i = 0; i < all_categories.length; i ++) {
+			editor.putBoolean(all_categories[i], false);
+		}
+		SparseBooleanArray checkedCats = listViewCats.getCheckedItemPositions();
+		if (checkedCats != null) {
+			for (int i = 0; i < checkedCats.size(); i++) {
+				if(checkedCats.valueAt(i)) {
+					editor.putBoolean(all_categories[i], true);
+				}
+			}
+		}
+		
+		// updates flags info
+		ArrayList<String> flagsToAdd = new ArrayList<String>();
+		for(int i = 0; i < all_tags.length; i ++) {
+			editor.putBoolean(all_tags[i], false);
+		}
+		SparseBooleanArray checkedTags = listViewTags.getCheckedItemPositions();
+		if (checkedTags != null) {
+			for (int i = 0; i < checkedTags.size(); i++) {
+				if(checkedTags.valueAt(i)) {
+					editor.putBoolean(all_tags[i], true);
+					flagsToAdd.add(all_tags[i]);
+				}
+			}
+		}
+		
+		editor.apply();
+		DataManager.setFlaggedTags(flagsToAdd);
+		
 	}
 
+		
 	public void onEnableNotificationsClicked(View view) {
 		boolean checked = ((CheckBox) view).isChecked();
-		/*if (checked)
-			((CheckBox) view).setChecked(false);
-		else
-			((CheckBox) view).setChecked(true);
-		*/
-		// because apparently fuck logic? (KV)
+		
 		((CheckBox) view).setChecked(checked);
 	}
 	
-
+	public void setCats(View view) {
+		return;
+	}
+	
+	public void setTags(View view) {
+		return;
+	}
 
 }

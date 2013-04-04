@@ -23,11 +23,14 @@ public class ArticleView extends Activity {
         
 		Bundle extras = getIntent().getExtras();
 		final TextView articleTitle = (TextView) findViewById(R.id.textViewArticleTitle);
+		final TextView articleText = (TextView)findViewById(R.id.textViewArticleText);
 		final String articleName = extras.getString("Name");
 		articleTitle.setText(articleName);	
 		final ArticleData article = DataManager.getArticle(articleName);
-		//articleTitle.setText(extras.getString("Name"));	
-		// Basically, now you can use articleName to get article info from DataManager and build the page accordingly
+
+		articleText.setText(article.getContent());
+		
+		
 		CheckBox favoritesBox = (CheckBox) findViewById(R.id.checkBox1);
 		favoritesBox.setChecked(article.isFavorited());
 		favoritesBox.setOnClickListener(new OnClickListener() {

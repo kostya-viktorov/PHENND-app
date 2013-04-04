@@ -1,6 +1,8 @@
 package edu.haverford.cs.phennd;
 
 //import edu.haverford.cs.phennd.NotificationService;
+import java.util.Arrays;
+
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -23,6 +25,9 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MainActivity<T> extends Activity {
 	
 	DataManager dataManager;
+	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
+	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
+	
 
 	class TabListener implements ActionBar.TabListener {
     	private Activity activity;
@@ -91,14 +96,20 @@ public class MainActivity<T> extends Activity {
         actionBar.addTab(tabSettings, 3, false);
         actionBar.selectTab(tabCategory);
         
-        String[] categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
-		ListView listView = (ListView) findViewById(R.id.listView1);
+        
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        updateCategories(prefs, all_categories);
+        updateTags(prefs, all_tags);
+        
+        String[] wantedCategories = getWantedCategories(prefs, all_categories);
+        
+        final ListView listOfCategories = (ListView) findViewById(R.id.listView1);
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
-		listView.setAdapter(adapter); 
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wantedCategories);
+		listOfCategories.setAdapter(adapter); 
        
        
-       // I think that this is why sometimes articles don't load - I might be crazy (KV)
+
        Thread t = new Thread() { 
     	   @Override
     	   public void run() {
@@ -108,7 +119,6 @@ public class MainActivity<T> extends Activity {
        t.start();
 
 
-        final ListView listOfCategories = (ListView)findViewById(R.id.listView1);
         
         listOfCategories.setOnItemClickListener(new OnItemClickListener() {
 
@@ -142,5 +152,48 @@ public class MainActivity<T> extends Activity {
 	    } */
 	}
 
+	
+	public void updateCategories(SharedPreferences prefs, String[] categories) {
+		SharedPreferences.Editor editor = prefs.edit();
+		
+        //puts categories into SharedPreferences if need be
+        if (!prefs.getBoolean("haveRunCats", false)) {
+        	for(int i = 0; i < categories.length; i++) {
+        		editor.putBoolean(categories[i], true);
+        	}
+        	editor.putBoolean("haveRunCats", true);
+        }
+        editor.apply();
+	}
+	
+	public void updateTags(SharedPreferences prefs, String[] tags) {
+		SharedPreferences.Editor editor = prefs.edit();
+		
+        //puts categories into SharedPreferences if need be
+        if (!prefs.getBoolean("haveRunTags", false)) {
+        	for(int i = 0; i < tags.length; i++) {
+        		editor.putBoolean(tags[i], true);
+        	}
+        	editor.putBoolean("haveRunTags", true);
+        }
+        editor.apply();
+	}
+	
+	public String[] getWantedCategories(SharedPreferences prefs, String[] categories) {
+		int size = categories.length;
+		int j = 0;
+		String[] wantedCategories = new String[size];
+		String[] answer;
+		
+		for (int i = 0; i < size; i++) {
+			if (prefs.getBoolean(categories[i], false)) {
+				wantedCategories[j] = categories[i];
+				j++;
+			}
+		}
+		
+		answer = Arrays.copyOfRange(wantedCategories, 0, j);
+		return answer;
+	}
 
 }
