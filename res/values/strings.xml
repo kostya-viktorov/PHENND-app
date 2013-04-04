@@ -8,5 +8,6 @@
     <string name="title_activity_article_view">Article View</string>
     <string name="title_activity_article_list_view">Article List View</string>
     <string name="title_activity_settings_view">Settings View</string>
+    <string name="title_activity_about_us">About Us</string>
     
 </resources> 
