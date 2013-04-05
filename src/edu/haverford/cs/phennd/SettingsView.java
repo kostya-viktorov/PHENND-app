@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -41,21 +43,12 @@ public class SettingsView extends Activity {
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
     		if (this.LaunchCode == 0) {
-    			if (this.activity.getClass() != MainActivity.class) {
     				startActivity(new Intent(this.activity, MainActivity.class));				
-    			}
     		} else if (this.LaunchCode == 1) {
-    			if (this.activity.getClass() != FavoritesView.class) {
-    				startActivity(new Intent(this.activity, FavoritesView.class));				
-    			}
+    				startActivity(new Intent(this.activity, MainActivity.class));
     		} else if (this.LaunchCode == 2) {
-    			if (this.activity.getClass() != TagView.class) {
-    				startActivity(new Intent(this.activity, TagView.class));				
-    			}
+    				startActivity(new Intent(this.activity, MainActivity.class));
     		} else if (this.LaunchCode == 3) {
-    			if (this.activity.getClass() != SettingsView.class) {
-    				startActivity(new Intent(this.activity, SettingsView.class));				
-    			}
     		}
 		}
 
@@ -70,8 +63,8 @@ public class SettingsView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings_view);
         ActionBar actionBar = getActionBar();
-        actionBar.setTitle("Settings");
-        actionBar.setSubtitle("PHENND Update");
+        actionBar.setTitle("PHENND Update");
+        actionBar.setSubtitle("Settings");
         
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -81,15 +74,10 @@ public class SettingsView extends Activity {
         tabFavorites.setText("Favorites").setIcon(R.drawable.staricon).setTabListener(new TabListener(this, 1));
         Tab tabTags = actionBar.newTab();
         tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new TabListener(this, 2));
-        Tab tabSettings = actionBar.newTab();
-        //tabSettings.setText("Settings").setIcon(R.drawable.ic_launcher).setTabListener(new TabListener(this, 3));
-        tabSettings.setText("Settings").setTabListener(new TabListener(this, 3));
 
-        actionBar.addTab(tabSettings, true);
         actionBar.addTab(tabCategory, 0, false);
         actionBar.addTab(tabFavorites, 1, false);
         actionBar.addTab(tabTags, 2, false);
-        actionBar.selectTab(tabSettings);
         
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         listViewCats = (ListView) findViewById(R.id.listViewCats);
@@ -178,4 +166,25 @@ public class SettingsView extends Activity {
 		return;
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.menu_settings:
+				startActivity(new Intent(this, SettingsView.class));		
+	            return true;
+	        case R.id.about_us:
+				startActivity(new Intent(this, AboutUsView.class));		
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 }
