@@ -34,10 +34,12 @@ public class MainActivity<T> extends Activity {
 	class MyTabListener implements TabListener {
     	private Activity activity;
     	private int LaunchCode = 0;
+    	private DataManager dm;
   	
     	public MyTabListener(Activity activity, int launchCode) {
     		this.activity = activity;
     		this.LaunchCode = launchCode;
+    		dm = DataManager.getDataManager(getBaseContext());
     	}
     	
 		@Override
@@ -64,7 +66,8 @@ public class MainActivity<T> extends Activity {
 		        Thread t = new Thread() { 
 		    	   @Override
 		    	   public void run() {
-		    	        dataManager.updateArticles();
+		    		   	DataManager dm = DataManager.getDataManager(getBaseContext());
+		    	        dm.updateArticles();
 		    	   }
 		       };
 		       t.start();       
@@ -84,7 +87,7 @@ public class MainActivity<T> extends Activity {
 		       });
 
 			} else if (this.LaunchCode == 1) {
-				List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+				List<String> favoriteArticles = dm.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, favoriteArticles);
 				displayList.setAdapter(adapter);
 		           
@@ -102,7 +105,7 @@ public class MainActivity<T> extends Activity {
 		        });
 		  
 			} else if (this.LaunchCode == 2) {
-		        List<String> flaggedTags = DataManager.getFlaggedTags();
+		        List<String> flaggedTags = dm.getFlaggedTags();
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, flaggedTags);
 				displayList.setAdapter(adapter); 
 				
@@ -133,6 +136,7 @@ public class MainActivity<T> extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dataManager = DataManager.getDataManager(getBaseContext());
         setContentView(R.layout.activity_main);
         
         ActionBar actionBar = getActionBar();

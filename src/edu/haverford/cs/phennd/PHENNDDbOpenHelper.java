@@ -10,7 +10,7 @@ public class PHENNDDbOpenHelper extends SQLiteOpenHelper {
 //String _eventDate, String _eventLocation
 	public static final String DATABASE_NAME = "phennd.db";
 	public static final String DATABASE_TABLE = "Articles";
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 1;
 	public static final String KEY_ID = "primary_key";
 	public static final String COL_PUBDATE = "pubDate";
 	public static final String COL_CONTENTS = "contents";
@@ -35,7 +35,9 @@ public class PHENNDDbOpenHelper extends SQLiteOpenHelper {
 	}
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		Log.w("PHENNDDb", "Creating DB?");
 		db.execSQL(DATABASE_CREATE);
+		Log.w("PHENNDDb", "Created DB.");
 	}
 
 	@Override

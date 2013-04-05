@@ -27,7 +27,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.maps.MapView;
+//import com.google.android.maps.MapView; 
 
 
 public class ArticleView extends Activity {
@@ -37,7 +37,7 @@ public class ArticleView extends Activity {
 	class TabListener implements ActionBar.TabListener {
     	private Activity activity;
     	private int LaunchCode;
-    	
+    	 
     	public TabListener(Activity activity, int launchCode) {
     		this.activity = activity;
     		this.LaunchCode = launchCode;
@@ -127,7 +127,7 @@ public class ArticleView extends Activity {
 		
 		All of the maps stuff.......
 		
-		**/
+		**/ /*
 		if (article.getEventLocation() != null) {
 			String serviceString = Context.LOCATION_SERVICE;
 			LocationManager locationManager = (LocationManager) getSystemService(serviceString);
@@ -161,16 +161,16 @@ public class ArticleView extends Activity {
 				Log.e("LOCATION_PROVIDER", "IO Exception", e);
 			}
 			
-			MapView mapView = (MapView) findViewById(R.id.map_fragment);
+			//MapView mapView = (MapView) findViewById(R.id.map_fragment);
 			
-			Uri locationUri = Uri.parse(locationOfInterest);
-			Intent mapCall = new Intent(Intent.ACTION_VIEW, locationUri);
-			startActivity(mapCall);
+			//Uri locationUri = Uri.parse(locationOfInterest);
+			//Intent mapCall = new Intent(Intent.ACTION_VIEW, locationUri);
+			//startActivity(mapCall);
 			
 			
-		} else {
+		} else { 
 			// do nothing
-		}
+		}*/
 		
 		
 		

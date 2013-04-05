@@ -16,6 +16,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -50,13 +51,15 @@ public class DataManager {
 			"South", "Center City", "New Jersey", "Older adult", "Youth",
 			"Women", "LGBT", "Immigrant" };
 	private static URL url;
-	private static PHENNDDbOpenHelper phenndDB;
+	private static PHENNDDbOpenHelper phenndDBHelper;
+	private static SQLiteDatabase phenndDB;
+	private static Semaphore db_sm = new Semaphore(1,false);
 	private static DataManager self = null;
 	private static int updatedCount = 0;
 	private static List<String> updatedTitles = new ArrayList<String>();
 	private static Context appContext;
 
-	public static DataManager getDataManager(Context context) {
+	public static synchronized DataManager getDataManager(Context context) {
 		if (self == null) {
 			self = new DataManager(context);
 		}
@@ -81,7 +84,7 @@ public class DataManager {
 		return toClean;
 	}
 
-	public ArticleData getArticle(String title) { // url is the best we
+	public synchronized ArticleData getArticle(String title) { // url is the best we
 															// can do as far as
 															// unique
 															// identifiers go
@@ -94,9 +97,18 @@ public class DataManager {
 		}
 
 		// Else, pull it from the DB.
+		try {
+		db_sm.acquire();
+		if (phenndDB == null) {
+			phenndDB = phenndDBHelper.getWritableDatabase();
+		}
+		db_sm.release();
+		} catch (InterruptedException e)  {
+			Log.w("PHENNDDb", "Interrupted!?");
+			return null;
+		}
 
-		SQLiteDatabase db = phenndDB.getReadableDatabase();
-		/*
+			/*
 		 * String[] results_columns = new String[] { PHENNDDbOpenHelper.COL_URL,
 		 * PHENNDDbOpenHelper.COL_PUBDATE, PHENNDDbOpenHelper.COL_CONTENTS,
 		 * PHENNDDbOpenHelper.COL_TITLE, PHENNDDbOpenHelper.COL_CREATOR,
@@ -122,7 +134,7 @@ public class DataManager {
 				+ PHENNDDbOpenHelper.COL_FAVORITED + " from "
 				+ PHENNDDbOpenHelper.DATABASE_TABLE + " where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "=?";
-		Cursor cursor = db.rawQuery(query, new String[] { title });
+		Cursor cursor = phenndDB.rawQuery(query, new String[] { title });
 		if (cursor.getCount() != 1) {
 			return null;
 		} // No article in DB
@@ -159,7 +171,7 @@ public class DataManager {
 
 	public DataManager(Context context) {
 		DataManager.appContext = context;
-		phenndDB = new PHENNDDbOpenHelper(context,
+		phenndDBHelper = new PHENNDDbOpenHelper(context,
 				PHENNDDbOpenHelper.DATABASE_NAME, null,
 				PHENNDDbOpenHelper.DATABASE_VERSION);
 	}
@@ -279,12 +291,17 @@ public class DataManager {
 	}
 
 	public boolean isNewArticle(Node item) {
+		
 		Element e = (Element) item;
 		String title = extractValue(e, "title");
 		if (getArticle(title) != null) {
 			return false;
 		}
+		if (getArticle(title) != null) {
+			return false;
+		}
 		return true;
+		
 	}
 
 	private static boolean has(String[] space, String target) {
@@ -354,8 +371,18 @@ public class DataManager {
 			rowVals.put(PHENNDDbOpenHelper.COL_EVENTLOCATION, eventLocation);
 		}
 
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.insert(PHENNDDbOpenHelper.DATABASE_TABLE, null, rowVals);
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase(); 
+			}
+			db_sm.release();
+		} catch (InterruptedException ex) {
+			Log.w("PHENNDDb", "Interupted.");
+			return null;
+		}
+		
+		phenndDB.insert(PHENNDDbOpenHelper.DATABASE_TABLE, null, rowVals);
 
 		ArticleData output = new ArticleData(url, pubDate, contents, title,
 				creator, category);
@@ -382,7 +409,17 @@ public class DataManager {
 
 	public static List<String> getArticleTitlesForTag(String tagName) {
 		List<String> titles = new ArrayList<String>();
-		SQLiteDatabase db = phenndDB.getReadableDatabase();
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase(); 
+			}
+			db_sm.release();
+		} catch (InterruptedException e) {
+			Log.w("PHENNDDb", "Interrupted");
+			return null;
+		}
+
 		/*
 		 * String[] resultsCol = {"title"}; String queryString =
 		 * PHENNDDbOpenHelper.COL_TAGS + " LIKE '%" + tagName + "%'";
@@ -393,7 +430,7 @@ public class DataManager {
 		String query = "select " + PHENNDDbOpenHelper.COL_TITLE + " from "
 				+ PHENNDDbOpenHelper.DATABASE_TABLE + " where "
 				+ PHENNDDbOpenHelper.COL_TAGS + " LIKE ?";
-		Cursor cursor = db
+		Cursor cursor = phenndDB
 				.rawQuery(query, new String[] { "%" + tagName + "%" });
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -409,8 +446,17 @@ public class DataManager {
 
 	public  List<String> getArticleTitlesForCategory(String categoryName) {
 		List<String> titles = new ArrayList<String>();
-
-		SQLiteDatabase db = phenndDB.getReadableDatabase();
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase();
+			}
+			db_sm.release();
+		}
+		catch (InterruptedException e) {
+			Log.w("PHENNDDb", "Interrupted?");
+			return null;
+		}
 		/*
 		 * String where = PHENNDDbOpenHelper.COL_CATEGORY + "=" + categoryName;
 		 * String[] resultsCol = {"title"}; Cursor cursor =
@@ -420,7 +466,7 @@ public class DataManager {
 		String query = "select " + PHENNDDbOpenHelper.COL_TITLE + " from "
 				+ PHENNDDbOpenHelper.DATABASE_TABLE + " where "
 				+ PHENNDDbOpenHelper.COL_CATEGORY + "=?";
-		Cursor cursor = db.rawQuery(query, new String[] { categoryName });
+		Cursor cursor = phenndDB.rawQuery(query, new String[] { categoryName });
 
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -442,8 +488,17 @@ public class DataManager {
 		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set "
 				+ PHENNDDbOpenHelper.COL_FAVORITED + "=0 where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "= ?";
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.rawQuery(query, new String[] { title });
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase();
+			}
+			db_sm.release();
+		} catch (InterruptedException e) {
+			Log.w("PHENNDDb", "Interrupted?");
+			return;
+		}
+		phenndDB.rawQuery(query, new String[] { title });
 		favoriteNames.add(title);
 	}
 
@@ -455,8 +510,18 @@ public class DataManager {
 		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set "
 				+ PHENNDDbOpenHelper.COL_FAVORITED + "=1 where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "= ?";
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.rawQuery(query, new String[] { title });
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB =phenndDBHelper.getWritableDatabase(); 
+			}
+			db_sm.release();
+		} catch (InterruptedException e) {
+			Log.w("PHENNDDb", "Interrupted");
+			return;
+		}
+		
+		phenndDB.rawQuery(query, new String[] { title });
 		/*
 		 * ContentValues updatedValues = new ContentValues();
 		 * updatedValues.put(PHENNDDbOpenHelper.COL_FAVORITED, "0"); String
@@ -487,8 +552,17 @@ public class DataManager {
 		favoriteNames.clear();
 		String query = "UPDATE " + PHENNDDbOpenHelper.DATABASE_TABLE + " set "
 				+ PHENNDDbOpenHelper.COL_FAVORITED + "=0 where " + PHENNDDbOpenHelper.COL_FAVORITED + "=1";
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.rawQuery(query, null);
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase();
+			}
+			db_sm.release();
+		} catch (InterruptedException e) {
+			Log.w("PHenndDB", "Interrupted");
+			return;
+		}
+		phenndDB.rawQuery(query, null);
 	}
 	
 	public void clearOld() {
@@ -496,10 +570,20 @@ public class DataManager {
 		long old = 1000*60*60*24*7*4; // 4 weeks in ms
 		String cutOff = Long.toString(new Date().getTime() - old);
 		
-		String query = "DELETE FROM " + PHENNDDbOpenHelper.DATABASE_TABLE + " WHERE " + PHENNDDbOpenHelper.COL_INSERT_DATE + " < ? AND "
+		String query = "DELETE FROM " + PHENNDDbOpenHelper.DATABASE_TABLE + " WHERE " + PHENNDDbOpenHelper.COL_INSERT_DATE + " <= ? AND "
 				+PHENNDDbOpenHelper.COL_FAVORITED + " =0";
-		SQLiteDatabase db = phenndDB.getWritableDatabase();
-		db.rawQuery(query, new String[] { cutOff});
+		try {
+			db_sm.acquire();
+			if (phenndDB == null) {
+				phenndDB = phenndDBHelper.getWritableDatabase();
+			}
+			db_sm.release();
+		} catch (InterruptedException e) {
+			Log.w("PHenndDB", "Interrupted");
+			return;
+		}
+		
+		phenndDB.rawQuery(query, new String[] { cutOff});
 	}
 	/*
 	 * Quote from info passed along to Dan I added the background service, which
