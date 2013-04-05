@@ -22,8 +22,8 @@ import android.widget.ListView;
 public class SettingsView extends Activity {
 	private ListView listViewCats;
 	private ListView listViewTags;
-	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
-	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
+	private String[] all_categories;
+	private String[] all_tags;
 	SharedPreferences prefs;
 	
 	class TabListener implements ActionBar.TabListener {
@@ -61,6 +61,11 @@ public class SettingsView extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+
+		all_categories = DataManager.categories;
+		all_tags = DataManager.tags;
+		
 		setContentView(R.layout.activity_settings_view);
         ActionBar actionBar = getActionBar();
         actionBar.setTitle("PHENND Update");
@@ -113,9 +118,17 @@ public class SettingsView extends Activity {
         enableNotifications.setChecked(true);
 
 	}
+
+	public void onResume() {
+		super.onResume();
+		all_categories = DataManager.categories;
+		all_tags = DataManager.tags;
+	}
 	
 	public void onPause() {
 		super.onPause();
+		all_categories = DataManager.categories;
+		all_tags = DataManager.tags;
 		SharedPreferences.Editor editor = prefs.edit();
 
 		// updates categories info

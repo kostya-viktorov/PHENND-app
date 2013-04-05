@@ -36,13 +36,13 @@ public class DataManager {
 	private static List<String> favoriteUIDs = new ArrayList<String>();
 	private static List<ArticleData> articles = new ArrayList<ArticleData>();
 	private static List<String> favoriteNames = new ArrayList<String>();
-	private static String[] categories = { "Grant Opportunities",
+	public static String[] categories = { "Grant Opportunities",
 			"Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships",
 			"For Students", "Miscellaneous",
 			"National Conferences & Calls for Proposal", "New Resources",
 			"Other Local Events and workshops", "Partnerships Classifieds",
 			"PHENND Events/Activities" };
-	private static String[] tags = { "Education", "Health", "Environment",
+	public static String[] tags = { "Education", "Health", "Environment",
 			"Service-learning", "Higher Education", "Arts", "Nonprofit",
 			"Nutrition", "Poverty", "Civic Engagement",
 			"Community Service/Volunteer", "Technology", "AmeriCorps",

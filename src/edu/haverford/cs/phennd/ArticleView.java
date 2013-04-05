@@ -1,19 +1,34 @@
 package edu.haverford.cs.phennd;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import edu.haverford.cs.phennd.SettingsView.TabListener;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.maps.MapView;
+
 
 public class ArticleView extends Activity {
 
@@ -106,6 +121,59 @@ public class ArticleView extends Activity {
 		 
 			  }
 			});
+		
+		
+		/**
+		
+		All of the maps stuff.......
+		
+		**/
+		if (article.getEventLocation() != null) {
+			String serviceString = Context.LOCATION_SERVICE;
+			LocationManager locationManager = (LocationManager) getSystemService(serviceString);
+			
+			boolean enabledOnly = true;
+			List<String> providers = locationManager.getProviders(enabledOnly);
+			
+			Criteria criteria = new Criteria();
+			criteria.setAccuracy(Criteria.ACCURACY_HIGH);
+			criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+			criteria.setAltitudeRequired(false);
+			criteria.setBearingRequired(false);
+			criteria.setSpeedRequired(false);
+			criteria.setCostAllowed(true);
+			criteria.setHorizontalAccuracy(Criteria.ACCURACY_MEDIUM);
+			criteria.setVerticalAccuracy(Criteria.ACCURACY_MEDIUM);
+			criteria.setBearingAccuracy(Criteria.ACCURACY_LOW);
+			criteria.setSpeedAccuracy(Criteria.ACCURACY_MEDIUM);
+			
+			List<String> matchingProviders = locationManager.getProviders(criteria, false);
+			
+			String providerName = LocationManager.GPS_PROVIDER;
+			LocationProvider gpsProvider = locationManager.getProvider(providerName);
+			
+			String locationOfInterest = article.getEventLocation();
+			Geocoder fwdGeocoder = new Geocoder(this, Locale.US);
+			List<Address> locations = null;
+			try {
+				locations = fwdGeocoder.getFromLocationName(locationOfInterest, 5);
+			} catch (IOException e) {
+				Log.e("LOCATION_PROVIDER", "IO Exception", e);
+			}
+			
+			MapView mapView = (MapView) findViewById(R.id.map_fragment);
+			
+			Uri locationUri = Uri.parse(locationOfInterest);
+			Intent mapCall = new Intent(Intent.ACTION_VIEW, locationUri);
+			startActivity(mapCall);
+			
+			
+		} else {
+			// do nothing
+		}
+		
+		
+		
 		 
 	}
 
