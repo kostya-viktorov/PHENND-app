@@ -1,101 +1,156 @@
 package edu.haverford.cs.phennd;
 
-//import edu.haverford.cs.phennd.NotificationService;
+
 import java.util.Arrays;
+import java.util.List;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.FragmentTransaction;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
+
 
 public class MainActivity<T> extends Activity {
-	
-	DataManager dataManager;
+
 	private String[] all_categories = {"Grant Opportunities", "Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships", "For Students","Miscellaneous","National Conferences & Calls for Proposal","New Resources","Other Local Events and workshops","Partnerships Classifieds","PHENND Events/Activities"};
 	private String[] all_tags = {"Education","Health","Environment","Service-learning","Higher Education","Arts","Nonprofit","Nutrition","Poverty","Civic Engagement","Community Service/Volunteer","Technology","AmeriCorps","Community Development","West","North","Northeast","Northwest","South","Center City","New Jersey","Older adult","Youth","Women","LGBT","Immigrant"};
+	private DataManager dataManager;
+	ListView displayList;
+	String tagsOrCategories = "Categories";
 	
-
-	class TabListener implements ActionBar.TabListener {
+	class MyTabListener implements TabListener {
     	private Activity activity;
-    	private int LaunchCode;
-    	
-    	public TabListener(Activity activity, int launchCode) {
+    	private int LaunchCode = 0;
+  	
+    	public MyTabListener(Activity activity, int launchCode) {
     		this.activity = activity;
     		this.LaunchCode = launchCode;
     	}
-
+    	
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			// Do nothing for now
+			if (this.LaunchCode == 0) {
+				
+			}
 		}
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-    		if (this.LaunchCode == 0) {
-    			if (this.activity.getClass() != MainActivity.class) {
-    				startActivity(new Intent(this.activity, MainActivity.class));				
-    			}
-    		} else if (this.LaunchCode == 1) {
-    			if (this.activity.getClass() != FavoritesView.class) {
-    				startActivity(new Intent(this.activity, FavoritesView.class));				
-    			}
-    		} else if (this.LaunchCode == 2) {
-    			if (this.activity.getClass() != TagView.class) {
-    				startActivity(new Intent(this.activity, TagView.class));				
-    			}
-    		} else if (this.LaunchCode == 3) {
-    			if (this.activity.getClass() != SettingsView.class) {
-    				startActivity(new Intent(this.activity, SettingsView.class));				
-    			}
-    		}
+			if (this.LaunchCode == 0) {
+		        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		        updateCategories(prefs, all_categories);
+		        updateTags(prefs, all_tags);
+		        
+		        String[] wantedCategories = getWantedCategories(prefs, all_categories);
+		        
+		        displayList = (ListView)findViewById(R.id.listView1);
+		        
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, wantedCategories);
+				displayList.setAdapter(adapter); 
+		       
+		        Thread t = new Thread() { 
+		    	   @Override
+		    	   public void run() {
+		    	        dataManager.updateArticles();
+		    	   }
+		       };
+		       t.start();       
+		       
+		       displayList.setOnItemClickListener(new OnItemClickListener() {
+
+		           @Override
+		           public void onItemClick(AdapterView<?> parent, View v, int position,
+		                   long id) {
+		               Intent intent = new Intent(v.getContext(), ArticleListView.class);
+		           	String Name = (String) displayList.getItemAtPosition(position);
+		           	intent.putExtra("TagsOrCategories", "Categories");
+		           	intent.putExtra("MetaInfo", Name);
+		           	startActivityForResult(intent, 0);
+		           }
+
+		       });
+
+			} else if (this.LaunchCode == 1) {
+				List<String> favoriteArticles = DataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, favoriteArticles);
+				displayList.setAdapter(adapter);
+		           
+		        displayList.setOnItemClickListener(new OnItemClickListener() {
+
+		            @Override
+		            public void onItemClick(AdapterView<?> parent, View v, int position,
+		                    long id) {
+		                Intent intent = new Intent(v.getContext(), ArticleView.class);
+		            	String storyName = (String) displayList.getItemAtPosition(position);
+		            	intent.putExtra("Name", storyName);
+		            	startActivityForResult(intent, 0);
+		            }
+
+		        });
+		  
+			} else if (this.LaunchCode == 2) {
+		        List<String> flaggedTags = DataManager.getFlaggedTags();
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, flaggedTags);
+				displayList.setAdapter(adapter); 
+				
+				displayList.setOnItemClickListener(new OnItemClickListener() {
+
+		            @Override
+		            public void onItemClick(AdapterView<?> parent, View v, int position,
+		                    long id) {
+		                Intent intent = new Intent(v.getContext(), ArticleListView.class);
+		            	String tagName = (String) displayList.getItemAtPosition(position);
+		            	intent.putExtra("TagsOrCategories", "Tags");
+		            	intent.putExtra("MetaInfo", tagName);
+		            	startActivityForResult(intent, 0);
+		            }
+
+		        }); 
+		}
 		}
 
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			// Do nothing for now
+
 		}
 	}
+
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dataManager = new DataManager(getBaseContext());
         
         ActionBar actionBar = getActionBar();
-        actionBar.setTitle("Article Categories");
-        actionBar.setSubtitle("PHENND Update");
+        actionBar.setTitle("PHENND Update");
+        actionBar.setSubtitle("Articles");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         Tab tabCategory = actionBar.newTab();
-        tabCategory.setText("Categories").setIcon(R.drawable.shelficon).setTabListener(new TabListener(this,0));
+        tabCategory.setText("Categories").setIcon(R.drawable.shelficon).setTabListener(new MyTabListener(this, 0));
         Tab tabFavorites = actionBar.newTab();
-        tabFavorites.setText("Favorites").setIcon(R.drawable.staricon).setTabListener(new TabListener(this, 1));
+        tabFavorites.setText("Favorites").setIcon(R.drawable.staricon).setTabListener(new MyTabListener(this, 1));
         Tab tabTags = actionBar.newTab();
-        tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new TabListener(this, 2));
-        Tab tabSettings = actionBar.newTab();
-        tabSettings.setText("Settings").setTabListener(new TabListener(this, 3));
+        tabTags.setText("Tags").setIcon(R.drawable.tagicon).setTabListener(new MyTabListener(this,2));
 
         actionBar.addTab(tabCategory, true);
         actionBar.addTab(tabFavorites, 1, false);
         actionBar.addTab(tabTags, 2, false);
-        actionBar.addTab(tabSettings, 3, false);
         actionBar.selectTab(tabCategory);
-        
         
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         updateCategories(prefs, all_categories);
@@ -103,38 +158,36 @@ public class MainActivity<T> extends Activity {
         
         String[] wantedCategories = getWantedCategories(prefs, all_categories);
         
-        final ListView listOfCategories = (ListView) findViewById(R.id.listView1);
-		
+        displayList = (ListView)findViewById(R.id.listView1);
+        
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, wantedCategories);
-		listOfCategories.setAdapter(adapter); 
+		displayList.setAdapter(adapter); 
        
-       
-
-       Thread t = new Thread() { 
+        Thread t = new Thread() { 
     	   @Override
     	   public void run() {
     	        dataManager.updateArticles();
     	   }
        };
-       t.start();
+       t.start();       
+       
+       displayList.setOnItemClickListener(new OnItemClickListener() {
 
+           @Override
+           public void onItemClick(AdapterView<?> parent, View v, int position,
+                   long id) {
+               Intent intent = new Intent(v.getContext(), ArticleListView.class);
+           	String Name = (String) displayList.getItemAtPosition(position);
+           	intent.putExtra("TagsOrCategories", tagsOrCategories);
+           	intent.putExtra("MetaInfo", Name);
+           	startActivityForResult(intent, 0);
+           }
 
-        
-        listOfCategories.setOnItemClickListener(new OnItemClickListener() {
+       });
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position,
-                    long id) {
-                Intent intent = new Intent(v.getContext(), ArticleListView.class);
-            	String categoryName = (String) listOfCategories.getItemAtPosition(position);
-            	intent.putExtra("TagsOrCategories", "Categories");
-            	intent.putExtra("MetaInfo", categoryName);
-            	startActivityForResult(intent, 0);
-            }
-
-        });
-        
     }
+        
+        
 	public void onResume() {
 	    super.onResume();
 	 /* TODO: make this match what we want...
@@ -152,7 +205,6 @@ public class MainActivity<T> extends Activity {
 	    } */
 	}
 
-	
 	public void updateCategories(SharedPreferences prefs, String[] categories) {
 		SharedPreferences.Editor editor = prefs.edit();
 		
@@ -191,9 +243,29 @@ public class MainActivity<T> extends Activity {
 				j++;
 			}
 		}
-		
 		answer = Arrays.copyOfRange(wantedCategories, 0, j);
 		return answer;
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+	    return true;
+	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.menu_settings:
+				startActivity(new Intent(this, SettingsView.class));		
+	            return true;
+	        case R.id.about_us:
+				startActivity(new Intent(this, AboutUsView.class));		
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 }

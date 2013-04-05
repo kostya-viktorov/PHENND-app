@@ -265,22 +265,6 @@ public class DataManager {
 			Notification notification = new Notification(icon, tickerText, when); 
 			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
 			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", pIntent);
-			Notification notification = new Notification(icon, tickerText, when); // This
-																					// is
-																					// deprecated,
-																					// but
-																					// the
-																					// alternative
-																					// isn't
-																					// available
-																					// in
-																					// most
-																					// of
-																					// the
-																					// API
-																					// versions
-																					// we
-																					// target
 			notificationManager.notify(1, notification);
 			return changed;
 		}
