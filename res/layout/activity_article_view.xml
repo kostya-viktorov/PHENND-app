@@ -4,17 +4,17 @@
     android:layout_height="match_parent"
     tools:context=".ArticleView" >
     
-    <uses-permission
+<!--<uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
-    />
+    /> -->
     
-    <uses-permission
+<!-- <uses-permission
         android:name="android.permission.INTERNET"
-    />
+    /> -->    
     
-    <uses-library
+<!--     <uses-library
         android:name="com.google.android.maps"
-    />
+    /> -->
 
     <TextView
         android:id="@+id/textViewArticleTitle"
@@ -50,13 +50,13 @@
         android:layout_marginLeft="55dp"
         android:layout_marginRight="55dp"
         android:text="We'd like to show a map, but we have no address. =(" />
-
+<!-- 
     <fragment
         android:id="@+id/map_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:name="com.google.android.gms.MapFragment"
-    />
+    /> -->
     
     <CheckBox
         android:id="@+id/checkBox1"
