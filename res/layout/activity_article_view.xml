@@ -3,6 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ArticleView" >
+    
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+    />
+    
+    <uses-permission
+        android:name="android.permission.INTERNET"
+    />
+    
+    <uses-library
+        android:name="com.google.android.maps"
+    />
 
     <TextView
         android:id="@+id/textViewArticleTitle"
@@ -29,6 +41,7 @@
 	    android:onClick="onFavoriteCheckboxClicked"/>
     
     <TextView
+        android:id="@+id/textNoMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewArticleText"
@@ -38,6 +51,13 @@
         android:layout_marginRight="55dp"
         android:text="We'd like to show a map, but we have no address. =(" />
 
+    <fragment
+        android:id="@+id/map_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:name="com.google.android.gms.MapFragment"
+    />
+    
     <CheckBox
         android:id="@+id/checkBox1"
         android:layout_width="wrap_content"
