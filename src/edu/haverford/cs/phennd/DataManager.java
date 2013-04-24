@@ -37,6 +37,7 @@ public class DataManager {
 	private static List<String> favoriteUIDs = new ArrayList<String>();
 	private static List<ArticleData> articles = new ArrayList<ArticleData>();
 	private static List<String> favoriteNames = new ArrayList<String>();
+	private static Semaphore build_sem = new Semaphore(1, true);
 	public static String[] categories = { "Grant Opportunities",
 			"Job Opportunities/AmeriCorps Opportunities", "K-16 Partnerships",
 			"For Students", "Miscellaneous",
@@ -135,10 +136,13 @@ public class DataManager {
 				+ PHENNDDbOpenHelper.DATABASE_TABLE + " where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "=?";
 		Cursor cursor = phenndDB.rawQuery(query, new String[] { title });
-		if (cursor.getCount() != 1) {
+		Log.w("PHENND", query);
+		if (cursor.getCount() < 1) {
+			Log.w("PHENND","Didn't find " + title);
 			return null;
 		} // No article in DB
 		else { // Build and cache in memory
+			Log.w("PHENND", "Found " + title);
 			ArticleData article;
 			cursor.moveToFirst();
 			String _url = extract(cursor, PHENNDDbOpenHelper.COL_URL);
@@ -147,13 +151,11 @@ public class DataManager {
 			String _title = extract(cursor, PHENNDDbOpenHelper.COL_TITLE);
 			String _creator = extract(cursor, PHENNDDbOpenHelper.COL_CREATOR);
 			String _category = extract(cursor, PHENNDDbOpenHelper.COL_CATEGORY);
-			String _eventdate = extract(cursor,
-					PHENNDDbOpenHelper.COL_EVENTDATE);
-			String _eventlocation = extract(cursor,
-					PHENNDDbOpenHelper.COL_EVENTLOCATION);
+			//String _eventdate = extract(cursor,PHENNDDbOpenHelper.COL_EVENTDATE);
+			//String _eventlocation = extract(cursor, PHENNDDbOpenHelper.COL_EVENTLOCATION);
 
 			article = new ArticleData(_url, _pubDate, _contents, _title,
-					_creator, _category, _eventdate, _eventlocation);
+					_creator, _category);
 			articles.add(article);
 			return article;
 		}
@@ -241,11 +243,18 @@ public class DataManager {
 	}
 
 	public boolean buildArticles(NodeList rss) {
+		try {
+		build_sem.acquire();
+		} catch (InterruptedException e) {
+			return false;
+		}
 		if (rss == null) {
+			build_sem.release();
 			return false;
 		}
 		if (rss.getLength() == 0) {
 			Log.i("PHENND", "No RSS element.");
+			build_sem.release();			build_sem.release();
 			return false;
 		} else {
 			boolean changed = false;
@@ -263,6 +272,7 @@ public class DataManager {
 				}
 			}
 
+			if (updatedCount > 0 ) {
 			NotificationManager notificationManager;
 			Intent intent = new Intent(appContext, MainActivity.class);
 			PendingIntent pIntent = PendingIntent.getActivity(appContext, 0, intent, 0);
@@ -278,6 +288,9 @@ public class DataManager {
 			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
 			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", pIntent);
 			notificationManager.notify(1, notification);
+			updatedCount = 0;
+			}
+			build_sem.release();
 			return changed;
 		}
 	}
@@ -294,9 +307,6 @@ public class DataManager {
 		
 		Element e = (Element) item;
 		String title = extractValue(e, "title");
-		if (getArticle(title) != null) {
-			return false;
-		}
 		if (getArticle(title) != null) {
 			return false;
 		}
@@ -341,8 +351,8 @@ public class DataManager {
 		String title = extractValue(e, "title");
 		String creator = extractValue(e, "dc:creator");
 		List<String> categories = extractValues(e, "category");
-		String eventDate = extractValue(e, "dc:date");
-		String eventLocation = extractValue(e, "location");
+		//String eventDate = extractValue(e, "dc:date");
+		//String eventLocation = extractValue(e, "location");
 
 		String category = getCategory(categories);
 		List<String> tags = getTags(categories);
@@ -364,12 +374,12 @@ public class DataManager {
 		rowVals.put(PHENNDDbOpenHelper.COL_CATEGORY, category);
 		rowVals.put(PHENNDDbOpenHelper.COL_TAGS, tags_joined);
 		rowVals.put(PHENNDDbOpenHelper.COL_INSERT_DATE, new Date().getTime());
-		if (eventDate != "") {
+		/*if (eventDate != "") {
 			rowVals.put(PHENNDDbOpenHelper.COL_EVENTDATE, eventDate);
 		}
 		if (eventLocation != "") {
 			rowVals.put(PHENNDDbOpenHelper.COL_EVENTLOCATION, eventLocation);
-		}
+		}*/
 
 		try {
 			db_sm.acquire();
@@ -596,4 +606,7 @@ public class DataManager {
 	 * Also, we need to modify onResume to schedule properly. That needs to be
 	 * taken from the preferences, which I believe is Kostya's job.
 	 */
+	public static void resetUpdatedCount () {
+		updatedCount = 0;
+	}
 }
