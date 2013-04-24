@@ -96,6 +96,26 @@ public class NotificationService extends Service {
          */
         @Override
         protected void onPostExecute(Void result) {
+        	
+			if (DataManager.getUpdatedCount() > 0 ) {
+				Context appContext = getBaseContext();
+			NotificationManager notificationManager;
+			Intent intent = new Intent(appContext, MainActivity.class);
+			PendingIntent pIntent = PendingIntent.getActivity(appContext, 0, intent, 0);
+			notificationManager = (NotificationManager)appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager = (NotificationManager) appContext
+					.getSystemService(Context.NOTIFICATION_SERVICE);
+			int icon = R.drawable.ic_launcher;
+			Integer countUpdated = Integer.valueOf(DataManager.getUpdatedCount());
+			String tickerText = "New PHENND Update Articles";
+			long when = System.currentTimeMillis();
+			// This is deprecated, but the alternative (Notification Builder) isn't available in most of the API versions we target
+			Notification notification = new Notification(icon, tickerText, when); 
+			notification.defaults = Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE;
+			notification.setLatestEventInfo(appContext, "PHENND Update", countUpdated.toString() + " New Articles Posted", pIntent);
+			notificationManager.notify(1, notification);
+			DataManager.resetUpdatedCount();
+			}
         	// TODO: do some stuff.
             stopSelf();
         }

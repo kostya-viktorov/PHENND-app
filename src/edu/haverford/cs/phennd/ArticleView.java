@@ -127,7 +127,7 @@ public class ArticleView extends Activity {
 		All of the maps stuff.......
 		
 		**/ 
-		if (article.getEventLocation() != null) {
+/*		if (article.getEventLocation() != null) {
 			String serviceString = Context.LOCATION_SERVICE;
 			LocationManager locationManager = (LocationManager) getSystemService(serviceString);
 			
@@ -135,7 +135,7 @@ public class ArticleView extends Activity {
 			List<String> providers = locationManager.getProviders(enabledOnly);
 			
 			Criteria criteria = new Criteria();
-			criteria.setAccuracy(Criteria.ACCURACY_HIGH);
+			criteria.setAccuracy(Criteria.ACCURACY_FINE);
 			criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
 			criteria.setAltitudeRequired(false);
 			criteria.setBearingRequired(false);
@@ -168,7 +168,7 @@ public class ArticleView extends Activity {
 			
 		} else { 
 			// do nothing
-		}
+		}*/
 		
 		
 		
