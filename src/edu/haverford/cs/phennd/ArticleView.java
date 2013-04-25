@@ -191,11 +191,13 @@ public class ArticleView extends Activity {
 	public void onFavoriteCheckboxClicked(View view) {
 	    // Is the view now checked?
 	    boolean checked = ((CheckBox) view).isChecked();
+	    /*
 	    if (checked == true){
 	    	System.out.println("Box is now checked!");
 	    } else {
 	    	System.out.println("Box is now unchecked!");
 	    }
+	    */
 	    // Get an ArticleData object from DataManager; call setFavorited(boolean f) on the ArticleData with the value of checked
 	    // ArticleData article = DataManager.getArticle(articleTitle);
 	    // article.setFavorited(checked);

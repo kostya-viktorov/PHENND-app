@@ -98,6 +98,7 @@ public class MainActivity<T> extends Activity {
 		                   long id) {
 		               Intent intent = new Intent(v.getContext(), ArticleListView.class);
 		           	String Name = (String) displayList.getItemAtPosition(position);
+		           	
 		           	intent.putExtra("TagsOrCategories", "Categories");
 		           	intent.putExtra("MetaInfo", Name);
 		           	startActivityForResult(intent, 0);
@@ -106,6 +107,11 @@ public class MainActivity<T> extends Activity {
 		       });
     	} else if (listContentCode.equals(1)) {
     		List<String> favoriteArticles = dataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+        	favoriteArticles.remove("You do not currently have any articles favorited. You can find articles in" +
+        			"\"Categories\" or \"Tags\", and favorite them by clicking the checkbox in the top left corner.");
+	        if(favoriteArticles.isEmpty())
+	        	favoriteArticles.add("You do not currently have any articles favorited. You can find articles in" +
+	        			"\"Categories\" or \"Tags\", and favorite them by clicking the checkbox in the top left corner.");
     		ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, favoriteArticles);
     		displayList.setAdapter(adapter);
            
@@ -116,12 +122,23 @@ public class MainActivity<T> extends Activity {
                     long id) {
     				Intent intent = new Intent(v.getContext(), ArticleView.class);
     				String storyName = (String) displayList.getItemAtPosition(position);
+    				
+
+		           	// Really hacky way of making our "No Favorites" message not break the app when clicked
+		           	if (storyName.equals("You do not currently have any articles favorited. You can find articles in" +
+		        			"\"Categories\" or \"Tags\", and favorite them by clicking the checkbox in the top left corner."))
+	        			return;
+    				
     				intent.putExtra("Name", storyName);
     				startActivityForResult(intent, 0);
     			}
         });
     	} else if (listContentCode.equals(2)){
 	        List<String> flaggedTags = dataManager.getFlaggedTags();
+	        flaggedTags.remove("You do not currently have any tags selected. You can select them in \"Settings\", located in the top right corner.");
+	        if(flaggedTags.isEmpty())
+	        	flaggedTags.add("You do not currently have any tags selected. You can select them in \"Settings\", located in the top right corner.");
+	        	
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, flaggedTags);
 			displayList.setAdapter(adapter); 
 			
@@ -132,6 +149,10 @@ public class MainActivity<T> extends Activity {
 	                    long id) {
 	                Intent intent = new Intent(v.getContext(), ArticleListView.class);
 	            	String tagName = (String) displayList.getItemAtPosition(position);
+	            	
+	            	// Really hacky way of making our "No Tags" message not break the app when clicked
+	            	if (tagName.equals("You do not currently have any tags selected. You can select them in \"Settings\", located in the top right corner."))
+            			return;
 	            	intent.putExtra("TagsOrCategories", "Tags");
 	            	intent.putExtra("MetaInfo", tagName);
 	            	startActivityForResult(intent, 0);

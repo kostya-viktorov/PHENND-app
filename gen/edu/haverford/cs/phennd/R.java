@@ -19,18 +19,16 @@ public final class R {
         public static final int tagicon=0x7f020005;
     }
     public static final class id {
-        public static final int about_us=0x7f070010;
+        public static final int about_us=0x7f07000e;
         public static final int checkBox1=0x7f070007;
-        public static final int checkbox_enable_notifications=0x7f07000b;
+        public static final int checkbox_enable_notifications=0x7f07000a;
         public static final int imageView1=0x7f070000;
-        public static final int listView1=0x7f070009;
-        public static final int listView2=0x7f07000e;
-        public static final int listView3=0x7f070008;
-        public static final int listViewCats=0x7f07000c;
+        public static final int listView1=0x7f070008;
+        public static final int listViewCats=0x7f07000b;
         public static final int listViewList=0x7f070003;
-        public static final int listViewTags=0x7f07000d;
-        public static final int menu_settings=0x7f07000f;
-        public static final int settings_choices=0x7f07000a;
+        public static final int listViewTags=0x7f07000c;
+        public static final int menu_settings=0x7f07000d;
+        public static final int settings_choices=0x7f070009;
         public static final int textNoMap=0x7f070006;
         public static final int textView1=0x7f070001;
         public static final int textView2=0x7f070002;
@@ -41,12 +39,10 @@ public final class R {
         public static final int activity_about_us=0x7f030000;
         public static final int activity_article_list_view=0x7f030001;
         public static final int activity_article_view=0x7f030002;
-        public static final int activity_favorites_view=0x7f030003;
-        public static final int activity_main=0x7f030004;
-        public static final int activity_settings_view=0x7f030005;
-        public static final int activity_tag_view=0x7f030006;
-        public static final int article_list_view=0x7f030007;
-        public static final int splashactivity=0x7f030008;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_settings_view=0x7f030004;
+        public static final int article_list_view=0x7f030005;
+        public static final int splashactivity=0x7f030006;
     }
     public static final class menu {
         public static final int activity_article_view=0x7f060000;
