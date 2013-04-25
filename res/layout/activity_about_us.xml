@@ -8,6 +8,9 @@
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+	   android:layout_marginLeft="55dp"
+	   android:layout_marginRight="55dp"
+       android:layout_gravity="center_horizontal"
         android:src="@drawable/phenndheader" />
 
     <TextView
@@ -15,13 +18,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="About PHENND"
-        android:gravity="center"
+	   android:layout_marginLeft="55dp"
+	   android:layout_marginRight="55dp"
+       android:layout_gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+	   android:layout_marginLeft="55dp"
+	   android:layout_marginRight="55dp"
+       android:layout_gravity="center_horizontal"
         android:text="The Philadelphia Higher Education Network for Neighborhood Development (PHENND) is a consortium of 33 colleges and universities in the greater Philadelphia area. PHENND works to build the capacity of its member institutions to develop mutually beneficial, sustained, and democratic community-based service-learning partnerships. The consortium actively seeks to revitalize local communities and schools and foster civic responsibility among the region&apos;s colleges and universities. \n\nFor more information, see www.phennd.org" />
 
 </LinearLayout>
