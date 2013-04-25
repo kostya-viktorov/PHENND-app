@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class SettingsView extends Activity {
 	private ListView listViewCats;
@@ -109,7 +110,7 @@ public class SettingsView extends Activity {
 		listViewTags.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		
 		for (int i=0;i<all_tags.length;i++) {
-			thisBoolean = prefs.getBoolean(all_tags[i], true);
+			thisBoolean = prefs.getBoolean(all_tags[i], false); // tags are false by default
 			listViewTags.setItemChecked(i, thisBoolean);
 	    }
 		

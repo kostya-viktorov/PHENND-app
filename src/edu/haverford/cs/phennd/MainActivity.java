@@ -228,7 +228,7 @@ public class MainActivity<T> extends Activity {
         //puts categories into SharedPreferences if need be
         if (!prefs.getBoolean("haveRunTags", false)) {
         	for(int i = 0; i < tags.length; i++) {
-        		editor.putBoolean(tags[i], true);
+        		editor.putBoolean(tags[i], false); // sets them to false by default
         	}
         	editor.putBoolean("haveRunTags", true);
         }

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class TagView extends Activity {
@@ -92,6 +93,19 @@ public class TagView extends Activity {
         actionBar.selectTab(tabTags);
 
         flaggedTags = DataManager.getFlaggedTags(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
+
+        /*
+		TextView test = (TextView) findViewById(R.id.testing);
+        if (flaggedTags.isEmpty()) {
+			test.setText("THIS MOFO IS EMPTY, YO");
+        	flaggedTags.add("You do not appear to have any tags selected. Please update your tag preferences in Settings (on the top right).");
+        } else { 
+			test.setText("THIS MOFO IS NOT EMPTY, YO");
+        	flaggedTags.add("You do not appear to have any tags selected. Please update your tag preferences in Settings (on the top right).");
+        	
+        }
+        */
+        
         ListView listView = (ListView) findViewById(R.id.listView2);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flaggedTags);
 		listView.setAdapter(adapter); 
@@ -112,6 +126,7 @@ public class TagView extends Activity {
             }
 
         }); 
+        
 	}
 
 
