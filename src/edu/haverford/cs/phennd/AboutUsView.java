@@ -29,11 +29,17 @@ public class AboutUsView extends Activity {
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
     		if (this.LaunchCode == 0) {
-    				startActivity(new Intent(this.activity, MainActivity.class));				
+	                Intent intent = new Intent(this.activity, MainActivity.class);
+		           	intent.putExtra("TabToLaunch", "Main");
+    				startActivity(intent);
     		} else if (this.LaunchCode == 1) {
-    				startActivity(new Intent(this.activity, MainActivity.class));
+                Intent intent = new Intent(this.activity, MainActivity.class);
+	           	intent.putExtra("TabToLaunch", "Favorites");
+				startActivity(intent);
     		} else if (this.LaunchCode == 2) {
-    				startActivity(new Intent(this.activity, MainActivity.class));
+                Intent intent = new Intent(this.activity, MainActivity.class);
+	           	intent.putExtra("TabToLaunch", "Tags");
+				startActivity(intent);
     		} else if (this.LaunchCode == 3) {
     		}
 		}
