@@ -254,7 +254,7 @@ public class DataManager {
 		}
 		if (rss.getLength() == 0) {
 			Log.i("PHENND", "No RSS element.");
-			build_sem.release();			build_sem.release();
+			build_sem.release();
 			return false;
 		} else {
 			boolean changed = false;

@@ -104,9 +104,17 @@ public class ArticleListView extends Activity {
 		if (tagsOrCategories.equals("Tags")) {
 			actionBar.setTitle("Articles By Tag");
 			articles = dm.getArticleTitlesForTag(metaInfo);
+			if (articles.isEmpty())
+				articles.add("There do not seem to be any articles in this Tag. Please try a different one!");
+			else
+				articles.remove("There do not seem to be any articles in this Tag. Please try a different one!");
         } else if (tagsOrCategories.equals("Categories")) {
         	actionBar.setTitle("Articles By Category");
-			articles = dm.getArticleTitlesForCategory(metaInfo); 
+			articles = dm.getArticleTitlesForCategory(metaInfo);
+			if (articles.isEmpty())
+				articles.add("There do not seem to be any articles in this Category. Please try a different one!");
+			else
+				articles.remove("There do not seem to be any articles in this Category. Please try a different one!");
         }
       
         ListView listView = (ListView) findViewById(R.id.listViewList);		
