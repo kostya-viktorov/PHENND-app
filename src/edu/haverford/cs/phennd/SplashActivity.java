@@ -21,6 +21,7 @@ public class SplashActivity extends Activity {
  
                 finish();              
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+	           	intent.putExtra("TabToLaunch", "Main");
                 SplashActivity.this.startActivity(intent);
                }       
           
