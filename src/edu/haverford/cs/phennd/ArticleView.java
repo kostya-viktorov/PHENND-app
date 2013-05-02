@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -183,9 +184,23 @@ public class ArticleView extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_article_view, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.menu_settings:
+				startActivity(new Intent(this, SettingsView.class));		
+	            return true;
+	        case R.id.about_us:
+				startActivity(new Intent(this, AboutUsView.class));		
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	public void onFavoriteCheckboxClicked(View view) {

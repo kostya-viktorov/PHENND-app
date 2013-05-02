@@ -46,10 +46,8 @@ public final class R {
     }
     public static final class menu {
         public static final int activity_article_view=0x7f060000;
-        public static final int activity_favorites_view=0x7f060001;
-        public static final int activity_main=0x7f060002;
-        public static final int activity_settings_view=0x7f060003;
-        public static final int activity_tag_view=0x7f060004;
+        public static final int activity_main=0x7f060001;
+        public static final int activity_settings_view=0x7f060002;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
