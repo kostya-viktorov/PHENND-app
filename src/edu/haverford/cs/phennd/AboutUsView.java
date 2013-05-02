@@ -8,6 +8,8 @@ import android.app.ActionBar.Tab;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 public class AboutUsView extends Activity {
@@ -72,4 +74,25 @@ public class AboutUsView extends Activity {
         actionBar.addTab(tabTags, 2, false);
 
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.menu_settings:
+				startActivity(new Intent(this, SettingsView.class));		
+	            return true;
+	        case R.id.about_us:
+				startActivity(new Intent(this, AboutUsView.class));		
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 }
