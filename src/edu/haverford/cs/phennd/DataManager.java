@@ -151,12 +151,19 @@ public class DataManager {
 			String _title = extract(cursor, PHENNDDbOpenHelper.COL_TITLE);
 			String _creator = extract(cursor, PHENNDDbOpenHelper.COL_CREATOR);
 			String _category = extract(cursor, PHENNDDbOpenHelper.COL_CATEGORY);
+			boolean _favorited = extract(cursor, PHENNDDbOpenHelper.COL_FAVORITED) == "1";
 			//String _eventdate = extract(cursor,PHENNDDbOpenHelper.COL_EVENTDATE);
 			//String _eventlocation = extract(cursor, PHENNDDbOpenHelper.COL_EVENTLOCATION);
 
 			article = new ArticleData(_url, _pubDate, _contents, _title,
 					_creator, _category);
 			articles.add(article);
+			if (_favorited) { 
+				article.setFavorited(true);
+				if (! favoriteNames.contains(_title)) {
+					favoriteNames.add(_title);
+				}
+			} 
 			return article;
 		}
 	}
@@ -490,13 +497,13 @@ public class DataManager {
 						// articles with the given tag
 	}
 
-	public void addFavorite(String title) {
+	public synchronized void addFavorite(String title) {
 		ArticleData article = getArticle(title);
 		if (article != null && !article.isFavorited()) {
 			article.setFavorited(true);
 		}
 		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set "
-				+ PHENNDDbOpenHelper.COL_FAVORITED + "=0 where "
+				+ PHENNDDbOpenHelper.COL_FAVORITED + "=1 where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "= ?";
 		try {
 			db_sm.acquire();
@@ -509,16 +516,17 @@ public class DataManager {
 			return;
 		}
 		phenndDB.rawQuery(query, new String[] { title });
-		favoriteNames.add(title);
+		
+		if (!favoriteNames.contains(title)) { favoriteNames.add(title); }
 	}
 
-	public void removeFavorite(String title) {
+	public synchronized void removeFavorite(String title) {
 		ArticleData article = getArticle(title);
 		if (article != null && article.isFavorited()) {
 			article.setFavorited(false);
 		}
 		String query = "update " + PHENNDDbOpenHelper.DATABASE_TABLE + " set "
-				+ PHENNDDbOpenHelper.COL_FAVORITED + "=1 where "
+				+ PHENNDDbOpenHelper.COL_FAVORITED + "=0 where "
 				+ PHENNDDbOpenHelper.COL_TITLE + "= ?";
 		try {
 			db_sm.acquire();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ public class MainActivity<T> extends Activity {
 	private DataManager dataManager;
 	ListView displayList;
 	String tagsOrCategories = "Categories";
+	static String focus = "Categories";
 	
 	class MyTabListener implements TabListener {
     	private Activity activity;
@@ -53,10 +55,19 @@ public class MainActivity<T> extends Activity {
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 	
 		if (this.LaunchCode == 0) {
+			focus = "Categories";
+			Log.w("PHENND","cats");
+			getIntent().putExtra("TabToLaunch", "Categories");
 			swapListContent(activity,0);
 			} else if (this.LaunchCode == 1) {
+				focus = "Favorites";
+				getIntent().putExtra("TabToLaunch", "Favorites");
+				Log.w("PHENND","favs");
 				swapListContent(activity,1);
 			} else if (this.LaunchCode == 2) {
+				focus = "Tags";
+				getIntent().putExtra("TabToLaunch","Tags");
+				Log.w("PHENND","tags");
 				swapListContent(activity,2);				
 			}
 		}
@@ -71,7 +82,7 @@ public class MainActivity<T> extends Activity {
 	
 	
     protected void swapListContent(Activity activity, Integer listContentCode){
-    	if (listContentCode.equals(0)){
+    	if (listContentCode.equals(0)){ // categories
 	        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 	        updateCategories(prefs, all_categories);
 	        updateTags(prefs, all_tags);
@@ -105,7 +116,7 @@ public class MainActivity<T> extends Activity {
 		           }
 
 		       });
-    	} else if (listContentCode.equals(1)) {
+    	} else if (listContentCode.equals(1)) { // favorites
     		List<String> favoriteArticles = dataManager.getFavorites(); // REPLACE THIS WITH SINGLETON ACCESS TO DATAMANAGER
         	favoriteArticles.remove("You do not currently have any articles favorited. You can find articles in" +
         			"\"Categories\" or \"Tags\", and favorite them by clicking the checkbox in the top left corner.");
@@ -133,7 +144,7 @@ public class MainActivity<T> extends Activity {
     				startActivityForResult(intent, 0);
     			}
         });
-    	} else if (listContentCode.equals(2)){
+    	} else if (listContentCode.equals(2)){ // tags
 	        List<String> flaggedTags = dataManager.getFlaggedTags();
 	        flaggedTags.remove("You do not currently have any tags selected. You can select them in \"Settings\", located in the top right corner.");
 	        if(flaggedTags.isEmpty())
@@ -167,7 +178,15 @@ public class MainActivity<T> extends Activity {
         super.onCreate(savedInstanceState);
         dataManager = DataManager.getDataManager(getBaseContext());
         setContentView(R.layout.activity_main);
-        
+        Bundle extras = getIntent().getExtras();
+        String tabToPick = "";
+        if (extras != null) {
+        	tabToPick= extras.getString("TabToLaunch");
+        	focus = tabToPick;
+        } else {
+        	tabToPick = focus;
+        	Log.w("PHENND", "Focus is: " + focus);
+        }
         ActionBar actionBar = getActionBar();
         actionBar.setTitle("PHENND Update");
         actionBar.setSubtitle("Articles");
@@ -182,16 +201,11 @@ public class MainActivity<T> extends Activity {
 
         actionBar.addTab(tabCategory, true);
         actionBar.addTab(tabFavorites, 1, false);
-        actionBar.addTab(tabTags, 2, false);
-        actionBar.selectTab(tabCategory);
+        actionBar.addTab(tabTags, 2, false);    
 
         	
 
-        Bundle extras = getIntent().getExtras();
-        String tabToPick = "";
-        if (extras != null) {
-        	tabToPick= extras.getString("TabToLaunch");
-        }
+        
 		if (tabToPick.equals("Favorites")){
 			actionBar.setSelectedNavigationItem(1);			
 		} else if (tabToPick.equals("Tags")){

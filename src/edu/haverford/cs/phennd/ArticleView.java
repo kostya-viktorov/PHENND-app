@@ -119,6 +119,7 @@ public class ArticleView extends Activity {
 				    if (checked) {
 				    	dm.addFavorite(article.getTitle());
 				    }
+				    else { dm.removeFavorite(article.getTitle()); }
  				    if (article.isFavorited() == true) {
 				    	System.out.println("Article is favorited, do stuff here.");
 				    } else {
